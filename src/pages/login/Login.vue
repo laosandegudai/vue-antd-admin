@@ -213,6 +213,7 @@ export default {
           res.currentUser.tenantName=res.currentTenant.name;
           this.setUser(res.currentUser);
           let permissions = this.handlePermissions(res.auth.grantedPolicies);
+          console.log(permissions);
           this.setPermissions(permissions);
           this.setRoles(res.currentUser.roles);
           loadRoutes();

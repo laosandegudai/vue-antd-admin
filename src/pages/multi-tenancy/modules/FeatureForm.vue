@@ -28,10 +28,19 @@
               :label="feature.displayName"
             >
               <a-select
+              v-if="feature.valueType.name === 'SelectionStringValueType'"
                 v-model="feature.value"
               >
                 <a-select-option v-for="(item,index) in feature.valueType.itemSource.items" :key="index" :value="item.value"> {{$t(item.displayText.name)}} </a-select-option>
               </a-select>
+              <a-checkbox
+            v-if="feature.valueType.name === 'ToggleStringValueType'"
+            v-model="feature.value"
+          />
+          <a-input
+            v-else-if="feature.valueType.name === 'FreeTextStringValueType'"
+            v-model="feature.value"
+          />
             </a-form-model-item>
             <aside v-if="!group.features || group.features.length == 0">没有可用的功能.</aside>
           </a-tab-pane>
@@ -106,6 +115,13 @@ export default {
       getFeatures(this.featuresQuery)
         .then((response) => {
           // this.features = response.features;
+          response.groups.map(x=>{
+            x.features.map(feature=>{
+               if (feature.valueType.name === "ToggleStringValueType") {
+                 feature.value=feature.value === "true"?true:false;
+               }
+            });
+          });
           this.featuresData = response;
           // this.features.map((feature) => {
           //   if (feature.valueType.name === "ToggleStringValueType") {
@@ -133,7 +149,7 @@ export default {
             x.features.map(feature=>{
               tempData.features.push({
                 name: feature.name,
-                value: feature.value,
+                value: feature.value.toString(),
               });
             });
           });

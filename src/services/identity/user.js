@@ -1,13 +1,17 @@
-import {request, METHOD} from '@/utils/request'
+import { request, METHOD } from '@/utils/request'
 import { transformAbpListQuery } from '@/utils/abp'
 export async function getList(params) {
     return request("/api/identity/users", METHOD.GET, transformAbpListQuery(params))
 }
 export async function edit(params) {
+    // if (params.id) {
+    //     return request(`/api/identity/users/${params.id}`, METHOD.PUT, params)
+    // }
+    // return request("/api/identity/users", METHOD.POST, params)
     if (params.id) {
-        return request(`/api/identity/users/${params.id}`, METHOD.PUT, params)
+        return request(`/api/identity/users/${params.id}/update-to-organizations`, METHOD.PUT, params)
     }
-    return request("/api/identity/users", METHOD.POST, params)
+    return request('/api/identity/users/create-to-organizations', METHOD.POST, params)
 }
 export async function del(id) {
     return request(`/api/identity/users/${id}`, METHOD.DELETE)
@@ -21,12 +25,15 @@ export function getAssignableRoles() {
 export function getRolesByUserId(id) {
     return request(`/api/identity/users/${id}/roles`, METHOD.GET)
 }
+export function getOrganizationsByUserId(id, includeDetails = false) {
+    return request(`/api/identity/users/${id}/organizations`, METHOD.GET,includeDetails)
+  }
 export default {
     getList,
     edit,
     del,
     get,
     getAssignableRoles,
-    getRolesByUserId
-  }
-  
+    getRolesByUserId,
+    getOrganizationsByUserId
+}

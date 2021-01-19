@@ -72,7 +72,8 @@ export default {
         "身份标识管理":[],
         "特性管理":[],
         "租户管理":[],
-        "AbpVnext":[]
+        "AbpVnext":[],
+        "审计日志管理":[],
       },
       // selectedPermissions: [
       //   [],[],[],[],[]

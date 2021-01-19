@@ -18,3 +18,9 @@ Vue.filter('dayjs', function (dataStr, pattern = 'YYYY-MM-DD HH:mm:ss') {
 Vue.filter('moment', function (dataStr, pattern = 'YYYY-MM-DD HH:mm:ss') {
   return moment(dataStr).format(pattern)
 })
+Vue.filter('empty', function(value) {
+  if (!value) {
+    return '-'
+  }
+  return value
+})

@@ -1,7 +1,7 @@
 <template>
   <a-modal
     :title="form.id ? '修改文章' : '添加文章'"
-    :width="640"
+    :width="800"
     :visible="visible"
     :confirmLoading="confirmLoading"
     @ok="handleOk"
@@ -86,6 +86,13 @@
         <a-form-model-item label="发布时间" help="不选择默认当前发布时间">
           <a-date-picker v-model="form.creationTime" show-time />
         </a-form-model-item>
+        <a-form-model-item label="内容">
+          <quill-editor
+          v-model="form.content"
+          ref="myQuillEditor"
+          :options="editorOption"
+        ></quill-editor>
+        </a-form-model-item>
       </a-form-model>
     </a-spin>
   </a-modal>
@@ -94,8 +101,16 @@
 <script>
 import { get,edit } from "@/services/article";
 import { getList as getCategorys } from "@/services/articleCategory";
+import "quill/dist/quill.core.css";
+import "quill/dist/quill.snow.css";
+import "quill/dist/quill.bubble.css";
+import { quillEditor } from "vue-quill-editor";
+import quillConfig from "@/utils/quill-config";
 export default {
   name: "ArticleForm",
+  components: {
+    quillEditor
+  },
   data() {
     return {
       labelCol: { span: 7 },
@@ -113,8 +128,14 @@ export default {
       replaceFields:{children:'children', title:'displayName', key:'id',value:'id' },
       tags: [],
       inputVisible: false,
-      inputValue: ''
+      inputValue: '',
+      editorOption: quillConfig,
+      editor: null,
     };
+  },
+  beforeDestroy() {
+    this.editor = null;
+    delete this.editor;
   },
   created() {
     this.getCategorys();
@@ -199,8 +220,15 @@ export default {
       });
     }
   },
+  
 };
 </script>
 
 <style scoped>
+.ql-editor {
+  height: 600px !important;
+}
+.quill_box .ql-container {
+  height: 600px !important;
+}
 </style>

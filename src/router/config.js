@@ -148,7 +148,7 @@ const options = {
           component: PageView,
           children: [
             {
-              path: 'roleList',
+              path: 'role',
               name: '角色管理',
               meta: {
                 authority: 'AbpIdentity.Roles',
@@ -156,7 +156,7 @@ const options = {
               component: () => import('@/pages/identity/RoleList'),
             },
             {
-              path: 'userList',
+              path: 'user',
               name: '用户管理',
               meta: {
                 authority: 'AbpIdentity.Users',
@@ -164,12 +164,28 @@ const options = {
               component: () => import('@/pages/identity/UserList'),
             },
             {
-              path: 'tenantList',
+              path: 'tenant',
               name: '租户管理',
               meta: {
                 authority: 'AbpTenantManagement.Tenants',
               },
               component: () => import('@/pages/multi-tenancy/TenantList'),
+            },
+            {
+              path: 'auditLog',
+              name: '审计日志',
+              meta: {
+                authority: 'AbpAuditLogging.Default',
+              },
+              component: () => import('@/pages/auditlogging/List'),
+            },
+            {
+              path: 'organization',
+              name: '组织单元',
+              meta: {
+                authority: 'AbpIdentity.OrganitaionUnits',
+              },
+              component: () => import('@/pages/identity/OrganizationList'),
             },
           ]
         }

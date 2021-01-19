@@ -34,7 +34,12 @@
             <a-form-model-item label="姓">
               <a-input v-model="form.surname" />
             </a-form-model-item>
-            <a-form-model-item label="密码" ref="password" prop="password" :required="!form.id">
+            <a-form-model-item
+              label="密码"
+              ref="password"
+              prop="password"
+              :required="!form.id"
+            >
               <a-input
                 v-model="form.password"
                 type="password"
@@ -80,6 +85,11 @@
               </a-checkbox-group>
             </a-form-model-item>
           </a-tab-pane>
+          <a-tab-pane key="3" tab="组织单元" :forceRender="true">
+            <a-form-model-item>
+              <org-tree ref="dialogOrgTree" v-model="form.orgIds" />
+            </a-form-model-item>
+          </a-tab-pane>
         </a-tabs>
       </a-form-model>
     </a-spin>
@@ -92,89 +102,68 @@ import {
   edit,
   getAssignableRoles,
   getRolesByUserId,
+  getOrganizationsByUserId,
 } from "@/services/identity/user";
+import OrgTree from "@/components/module/organization/OrganizationTree";
 export default {
+  components: { OrgTree },
   name: "UserForm",
   data() {
     const passwordValidator = (rule, value, callback) => {
       if (this.form.id && !value) {
-        callback()
-        return
+        callback();
+        return;
       }
 
       if (!value) {
-        callback(
-          new Error(
-            "密码必须填写",
-          )
-        )
-        return
+        callback(new Error("密码必须填写"));
+        return;
       }
       if (value.length < 6) {
-        callback(
-          new Error(
-            "密码至少为6个字符."
-          )
-        )
-        return
+        callback(new Error("密码至少为6个字符."));
+        return;
       }
       if (value.length > 128) {
-        callback(
-          new Error(
-            "密码必须是最大长度为128的字符串."
-          )
-        )
-        return
+        callback(new Error("密码必须是最大长度为128的字符串."));
+        return;
       }
-      let reg = /\d+/
+      let reg = /\d+/;
       if (!reg.test(value)) {
-        callback(
-          new Error(
-            "密码至少包含一位数字 ('0'-'9')."
-          )
-        )
-        return
+        callback(new Error("密码至少包含一位数字 ('0'-'9')."));
+        return;
       }
-      reg = /[a-z]+/
+      reg = /[a-z]+/;
       if (!reg.test(value)) {
-        callback(
-          new Error(
-            "密码至少包含一位小写字母 ('a'-'z')."
-          )
-        )
-        return
+        callback(new Error("密码至少包含一位小写字母 ('a'-'z')."));
+        return;
       }
-      reg = /[A-Z]+/
+      reg = /[A-Z]+/;
       if (!reg.test(value)) {
-        callback(
-          "密码至少包含一位大写字母 ('A'-'Z')."
-        )
-        return
+        callback("密码至少包含一位大写字母 ('A'-'Z').");
+        return;
       }
-      reg = /\W+/
+      reg = /\W+/;
       if (!reg.test(value)) {
-        callback(
-          new Error(
-            "密码至少包含一位非字母数字字符."
-          )
-        )
-        return
+        callback(new Error("密码至少包含一位非字母数字字符."));
+        return;
       }
 
-      callback()
-    }
+      callback();
+    };
     return {
       labelCol: { span: 7 },
       wrapperCol: { span: 10 },
       visible: false,
       confirmLoading: false,
-      form: {},
+      form: {
+        orgIds: [],
+      },
       rules: {
         userName: [
           { required: true, message: "用户名必须填写", trigger: "blur" },
         ],
         password: [
-          { validator: passwordValidator, trigger: ['blur', 'change'] }
+          { validator: passwordValidator, trigger: ["blur", "change"] },
         ],
         // password: [
         //   { required: true, message: "密码必须填写", trigger: "blur" },
@@ -195,9 +184,11 @@ export default {
   methods: {
     createOrEdit(model) {
       this.visible = true;
-      this.form = model;
+      // this.form = model;
       if (model && model.id) {
         this.getFormData(model.id);
+      } else {
+        this.form = {};
       }
       getAssignableRoles().then((response) => {
         this.assignableRoles = response.items;
@@ -215,6 +206,10 @@ export default {
             response.items.forEach((item) => {
               this.form.roleNames.push(item.name);
             });
+          });
+          getOrganizationsByUserId(id).then((response) => {
+            this.form.orgIds = response.items.map((item) => item.id);
+            // this.$refs.dialogOrgTree.checkedKeys=this.form.orgIds;
           });
         })
         .finally(() => {
