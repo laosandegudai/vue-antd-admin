@@ -26,7 +26,7 @@
             <a-form-model-item :label="group.displayName">
               <a-tree
                 ref="permissionTree"
-                v-model="selectedPermissions[group.displayName]"
+                v-model="group.value"
                 checkable
                 defaultExpandAll
                 :treeData="transformPermissionTree(group.permissions)"
@@ -68,13 +68,14 @@ export default {
         title: "label",
         key: "name",
       },
-      selectedPermissions:{
-        "身份标识管理":[],
-        "特性管理":[],
-        "租户管理":[],
-        "AbpVnext":[],
-        "审计日志管理":[],
-      },
+      // selectedPermissions:{
+      //   "AbpIdentity":[],
+      //   "FeatureManagement":[],
+      //   "AbpTenantManagement":[],
+      //   "EasyAbp.FileManagement":[],
+      //   "AbpVnext":[],
+      //   "AbpAuditLogging":[],
+      // },
       // selectedPermissions: [
       //   [],[],[],[],[]
       // ],
@@ -104,21 +105,23 @@ export default {
       this.confirmLoading = true;
       get(this.permissionsQuery)
         .then((res) => {
-          this.permissionData = res;
-          for (const i in this.permissionData.groups) {
-            let selectedPermissions = [];
+          // this.permissionData = res;
+          for (const i in res.groups) {
+            // let selectedPermissions = [];
             const keys = [];
-            const group = this.permissionData.groups[i];
+            const group = res.groups[i];
             for (const j in group.permissions) {
               if (group.permissions[j].isGranted) {
                 keys.push(group.permissions[j].name);
               }
             }
-            selectedPermissions = [...selectedPermissions, ...keys];
-            this.$nextTick(() => {
-              that.selectedPermissions[group.displayName] = selectedPermissions||[];
-            });
+            group.value=keys||[];
+            // selectedPermissions = [...selectedPermissions, ...keys];
+            // this.$nextTick(() => {
+            //   that.selectedPermissions[group.name] = selectedPermissions||[];
+            // });
           }
+          this.permissionData = res;
         })
         .finally(() => {
           this.confirmLoading = false;
@@ -137,7 +140,8 @@ export default {
           for (const i in this.permissionData.groups) {
             
             const group = this.permissionData.groups[i];
-            const keys = that.selectedPermissions[group.displayName]||[];
+            // const keys = that.selectedPermissions[group.name]||[];
+            const keys = group.value||[];
             for (const j in group.permissions) {
               if (
                 group.permissions[j].isGranted &&
