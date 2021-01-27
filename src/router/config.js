@@ -188,6 +188,15 @@ const options = {
               component: () => import('@/pages/identity/OrganizationList'),
             },
           ]
+        },
+        {
+          path: 'file',
+          name: '文件管理',
+          meta: {
+            icon: 'folder',
+            authority: 'EasyAbp.FileManagement.File',
+          },
+          component: () => import('@/pages/file-management/File')
         }
       ]
     }

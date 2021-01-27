@@ -7,7 +7,7 @@ const baseListQuery = {
 }
 export function transformAbpListQuery(query) {
   query.filter = query.filter === '' ? undefined : query.filter
-  let order=query.sorter.order?query.sorter.order.replace('end', ''):'';
+  let order=query.sorter&&query.sorter.order?query.sorter.order.replace('end', ''):'';
   const abpListQuery = {
     maxResultCount: query.pageSize,
     skipCount: (query.current - 1) * query.pageSize,
