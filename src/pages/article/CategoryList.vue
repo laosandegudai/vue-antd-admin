@@ -2,12 +2,12 @@
   <a-card>
     <div>
       <div class="operator">
-        <a-button @click="$refs.createModal.createOrEdit({})" type="primary"
+        <a-button v-if="checkPermission('AbpVnext.ArticleCategory.Create')" @click="$refs.createModal.createOrEdit({})" type="primary"
           >新建</a-button
         >
         <a-dropdown v-if="selectedRows.length > 0">
           <a-menu @click="handleMenuClick" slot="overlay">
-            <a-menu-item key="delete">删除</a-menu-item>
+            <a-menu-item v-if="checkPermission('AbpVnext.ArticleCategory.Delete')" key="delete">删除</a-menu-item>
           </a-menu>
           <a-button> 批量操作 <a-icon type="down" /> </a-button>
         </a-dropdown>
@@ -30,7 +30,7 @@
                 <a-icon type="down" />
               </a>
               <a-menu slot="overlay">
-                <a-menu-item>
+                <a-menu-item v-if="checkPermission('AbpVnext.ArticleCategory.Create')">
                   <a
                     href="javascript:;"
                     @click="
@@ -39,14 +39,14 @@
                     >添加子项</a
                   >
                 </a-menu-item>
-                <a-menu-item>
+                <a-menu-item v-if="checkPermission('AbpVnext.ArticleCategory.Update')">
                   <a
                     href="javascript:;"
                     @click="$refs.createModal.createOrEdit(record)"
                     >编辑</a
                   >
                 </a-menu-item>
-                <a-menu-item>
+                <a-menu-item v-if="checkPermission('AbpVnext.ArticleCategory.Delete')">
                   <a-popconfirm
                     title="确定要删除吗？"
                     @confirm="handleDel(record.id)"
@@ -68,6 +68,7 @@
 import StandardTable from "@/components/table/StandardTable";
 import { del, dels,getTrees } from "@/services/articleCategory";
 import CreateForm from "./modules/CategoryForm";
+import { checkPermission } from '@/utils/abp';
 const columns = [
   {
     title: "分类名称",
@@ -110,6 +111,7 @@ export default {
     this.loadData();
   },
   methods: {
+    checkPermission,
     toggleAdvanced() {
       this.advanced = !this.advanced;
     },

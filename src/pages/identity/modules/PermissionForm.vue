@@ -28,6 +28,7 @@
                 ref="permissionTree"
                 v-model="group.value"
                 checkable
+                checkStrictly
                 defaultExpandAll
                 :treeData="transformPermissionTree(group.permissions)"
                 :replaceFields="treeDefaultProps"
@@ -115,7 +116,7 @@ export default {
                 keys.push(group.permissions[j].name);
               }
             }
-            group.value=keys||[];
+            group.value= {checked:keys||[]};
             // selectedPermissions = [...selectedPermissions, ...keys];
             // this.$nextTick(() => {
             //   that.selectedPermissions[group.name] = selectedPermissions||[];
@@ -141,7 +142,7 @@ export default {
             
             const group = this.permissionData.groups[i];
             // const keys = that.selectedPermissions[group.name]||[];
-            const keys = group.value||[];
+            const keys = group.value.checked||[];
             for (const j in group.permissions) {
               if (
                 group.permissions[j].isGranted &&

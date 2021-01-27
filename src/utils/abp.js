@@ -1,4 +1,4 @@
-
+import store from '@/store'
 const baseListQuery = {
   current: 1,
   pageSize: 10,
@@ -22,5 +22,12 @@ export function transformAbpListQuery(query) {
   delete abpListQuery.sorter
   return abpListQuery
 }
-
+export function checkPermission(policy) {
+  const permissions = store.getters['account/permissions'];
+  if (permissions.map(x=>x.id).indexOf(policy)>-1) {
+    return true
+  } else {
+    return false
+  }
+}
 export default baseListQuery

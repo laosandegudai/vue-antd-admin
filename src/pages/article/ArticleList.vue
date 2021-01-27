@@ -46,10 +46,10 @@
     </div>
     <div>
       <div class="operator">
-        <a-button @click="$refs.createModal.createOrEdit({})" type="primary">新建</a-button>
+        <a-button v-if="checkPermission('AbpVnext.Article.Create')" @click="$refs.createModal.createOrEdit({})" type="primary">新建</a-button>
         <a-dropdown v-if="selectedRows.length > 0">
           <a-menu @click="handleMenuClick" slot="overlay">
-            <a-menu-item key="delete">删除</a-menu-item>
+            <a-menu-item v-if="checkPermission('AbpVnext.Article.Delete')" key="delete">删除</a-menu-item>
           </a-menu>
           <a-button> 批量操作 <a-icon type="down" /> </a-button>
         </a-dropdown>
@@ -77,10 +77,10 @@
                 <a-icon type="down" />
               </a>
               <a-menu slot="overlay">
-                <a-menu-item>
+                <a-menu-item v-if="checkPermission('AbpVnext.Article.Update')">
                   <a href="javascript:;" @click="$refs.createModal.createOrEdit(record)">编辑</a>
                 </a-menu-item>
-                <a-menu-item>
+                <a-menu-item v-if="checkPermission('AbpVnext.Article.Delete')">
                   <a-popconfirm
                     title="确定要删除吗？"
                     @confirm="handleDel(record.id)"
@@ -103,6 +103,7 @@ import StandardTable from "@/components/table/StandardTable";
 import { getList, del, dels } from "@/services/article";
 import CreateForm from "./modules/ArticleForm";
 import { getTrees as getCategorys } from "@/services/articleCategory";
+import { checkPermission } from '@/utils/abp';
 const columns = [
   {
     title: "标题",
@@ -160,8 +161,10 @@ export default {
     that=this;
     this.loadData();
     this.getCategorys();
+    console.log("permissions",this.permissions);
   },
   methods: {
+    checkPermission,
     toggleAdvanced() {
       this.advanced = !this.advanced;
     },

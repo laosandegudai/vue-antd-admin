@@ -55,6 +55,7 @@
     <div>
       <div class="operator">
         <a-button
+          v-if="checkPermission('EasyAbp.FileManagement.File.Create')"
           @click="
             $refs.createModal.createOrEdit({
               fileContainerName: queryParam.fileContainerName,
@@ -67,6 +68,7 @@
           >创建目录</a-button
         >
         <a-button
+          v-if="checkPermission('EasyAbp.FileManagement.File.Create')"
           @click="
             $refs.uploadModal.createOrEdit({
               fileContainerName: queryParam.fileContainerName,
@@ -80,7 +82,7 @@
         >
         <a-dropdown v-if="selectedRows.length > 0">
           <a-menu @click="handleMenuClick" slot="overlay">
-            <a-menu-item key="delete">删除</a-menu-item>
+            <a-menu-item v-if="checkPermission('EasyAbp.FileManagement.File.Delete')" key="delete">删除</a-menu-item>
           </a-menu>
           <a-button> 批量操作 <a-icon type="down" /> </a-button>
         </a-dropdown>
@@ -126,13 +128,13 @@
                 <a-menu-item>
                   <a href="javascript:;">移动</a>
                 </a-menu-item> -->
-                <a-menu-item v-if="record.fileType==2">
+                <a-menu-item v-if="checkPermission('EasyAbp.FileManagement.File.GetDownloadInfo')&&record.fileType==2">
                   <a href="javascript:;" @click="download(record.id)">下载</a>
                 </a-menu-item>
                 <!-- <a-menu-item v-if="record.fileType==2">
                   <a href="javascript:;">重新上传</a>
                 </a-menu-item> -->
-                <a-menu-item>
+                <a-menu-item v-if="checkPermission('EasyAbp.FileManagement.File.Delete')">
                   <a-popconfirm
                     title="确定要删除吗？"
                     @confirm="handleDel(record.id)"
@@ -158,6 +160,7 @@ import CreateDirectoryModal from "./modules/CreateDirectoryModal";
 import UploadModal from "./modules/UploadModal";
 import { getList as getUsers } from "@/services/identity/user";
 import { mapGetters } from "vuex";
+import { checkPermission } from '@/utils/abp';
 const columns = [
   {
     title: "文件名",
@@ -225,6 +228,7 @@ export default {
     this.getUsers();
   },
   methods: {
+    checkPermission,
     toggleAdvanced() {
       this.advanced = !this.advanced;
     },

@@ -2,7 +2,7 @@
   <a-card>
     <div>
       <div class="operator">
-        <a-button @click="$refs.createModal.createOrEdit({})" type="primary"
+        <a-button v-if="checkPermission('AbpIdentity.OrganitaionUnits.Create')" @click="$refs.createModal.createOrEdit({})" type="primary"
           >新建</a-button
         >
         <!-- <a-dropdown v-if="selectedRows.length > 0">
@@ -30,7 +30,7 @@
                 <a-icon type="down" />
               </a>
               <a-menu slot="overlay">
-                <a-menu-item>
+                <a-menu-item v-if="checkPermission('AbpIdentity.OrganitaionUnits.Create')">
                   <a
                     href="javascript:;"
                     @click="
@@ -39,14 +39,14 @@
                     >添加子项</a
                   >
                 </a-menu-item>
-                <a-menu-item>
+                <a-menu-item v-if="checkPermission('AbpIdentity.OrganitaionUnits.Update')">
                   <a
                     href="javascript:;"
                     @click="$refs.createModal.createOrEdit(record)"
                     >编辑</a
                   >
                 </a-menu-item>
-                <a-menu-item>
+                <a-menu-item v-if="checkPermission('AbpIdentity.OrganitaionUnits.Delete')">
                   <a-popconfirm
                     title="确定要删除吗？"
                     @confirm="handleDel(record.id)"
@@ -68,6 +68,7 @@
 import StandardTable from "@/components/table/StandardTable";
 import { deleteOrganization as del,getOrganizationsAll } from "@/services/identity/organization";
 import CreateForm from "./modules/OrganizationForm";
+import { checkPermission } from '@/utils/abp';
 const columns = [
   {
     title: "编码",
@@ -109,6 +110,7 @@ export default {
     this.loadData();
   },
   methods: {
+    checkPermission,
     toggleAdvanced() {
       this.advanced = !this.advanced;
     },

@@ -2,7 +2,7 @@
   <a-card>
     <div>
       <div class="operator">
-        <a-button @click="$refs.createModal.createOrEdit({})" type="primary" v-auth="`Create`"
+        <a-button v-if="checkPermission('AbpIdentity.Roles.Create')" @click="$refs.createModal.createOrEdit({})" type="primary"
           >新建</a-button
         >
       </div>
@@ -29,23 +29,22 @@
                 <a-icon type="down" />
               </a>
               <a-menu slot="overlay">
-                <a-menu-item>
+                <a-menu-item v-if="checkPermission('AbpIdentity.Roles.Update')">
                   <a
                     href="javascript:;"
                     @click="$refs.createModal.createOrEdit(record)"
-                    v-auth="`Update`"
                     >编辑</a
                   >
                 </a-menu-item>
-                <a-menu-item>
+                <a-menu-item v-if="checkPermission('AbpIdentity.Roles.ManagePermissions')">
                   <a href="javascript:;" @click="$refs.permissionModal.createOrEdit(record)">权限</a>
                 </a-menu-item>
-                <a-menu-item>
+                <a-menu-item v-if="checkPermission('AbpIdentity.Roles.Delete')">
                   <a-popconfirm
                     title="确定要删除吗？"
                     @confirm="handleDel(record.id)"
                   >
-                    <a href="javascript:;" v-auth="`Delete`">删除</a>
+                    <a href="javascript:;">删除</a>
                   </a-popconfirm>
                 </a-menu-item>
               </a-menu>
@@ -64,6 +63,7 @@ import StandardTable from "@/components/table/StandardTable";
 import { getList, del } from "@/services/identity/role";
 import CreateForm from "./modules/RoleForm";
 import PermissionForm from "./modules/PermissionForm";
+import { checkPermission } from '@/utils/abp';
 const columns = [
   {
     title: "角色名称",
@@ -106,6 +106,7 @@ export default {
     this.loadData();
   },
   methods: {
+    checkPermission,
     toggleAdvanced() {
       this.advanced = !this.advanced;
     },
