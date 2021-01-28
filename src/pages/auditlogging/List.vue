@@ -136,6 +136,7 @@
           </a-menu>
           <a-button> 批量操作 <a-icon type="down" /> </a-button>
         </a-dropdown>
+        <a-button type="primary" icon="export" @click="exportExcel"> 导出 </a-button>
       </div>
       <standard-table
         rowKey="id"
@@ -204,9 +205,9 @@ import {
   getAuditLogs as getList,
   deleteAuditLog as del,
   deleteManyAuditLog as dels,
+  exportExcel
 } from "@/services/auditlogging/auditlog";
 import ShowForm from "./modules/ShowForm";
-import { getTrees as getCategorys } from "@/services/articleCategory";
 import moment from 'moment'
 const columns = [
   {
@@ -265,13 +266,6 @@ export default {
       loading: false,
       queryDateTime: undefined,
       queryParam: {},
-      categorys: [],
-      replaceFields: {
-        children: "children",
-        title: "displayName",
-        key: "id",
-        value: "id",
-      },
     };
   },
   // authorize: {
@@ -280,7 +274,6 @@ export default {
   mounted() {
     that = this;
     this.loadData();
-    this.getCategorys();
   },
   filters: {
     requestDurationFilter(duration) {
@@ -394,11 +387,13 @@ export default {
       this.pagination.current = 1;
       this.loadData();
     },
-    getCategorys() {
-      getCategorys().then((res) => {
-        this.categorys = res;
-      });
-    },
+    exportExcel(){
+      let params = {
+        ...this.queryParam,
+        sorter: this.sorter,
+      };
+      exportExcel(params);
+    }
   },
 };
 </script>

@@ -53,3 +53,11 @@ export default {
     }
   }
 </style>
+<style lang="less">
+.operator {
+  margin-bottom: 18px;
+  button {
+    margin-right: 5px;
+  }
+}
+</style>

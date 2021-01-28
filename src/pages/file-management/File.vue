@@ -332,7 +332,7 @@ export default {
       getDownloadInfo(id).then((res) => {
         const a = document.createElement("a");
         a.download = res.expectedFileName;
-        a.href = res.downloadUrl.replace(/fileManagement/, "file-management");
+        a.href = res.downloadUrl;
         a.click();
         a.remove();
       });
@@ -348,12 +348,6 @@ export default {
 .fold {
   width: calc(100% - 216px);
   display: inline-block;
-}
-.operator {
-  margin-bottom: 18px;
-  button {
-    margin-right: 5px;
-  }
 }
 @media screen and (max-width: 900px) {
   .fold {
