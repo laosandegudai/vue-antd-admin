@@ -32,12 +32,28 @@ export function exportExcel(params){
     a.click();
     a.remove();
 }
+export function generateTemplate(){
+    const a = document.createElement("a");
+    a.href = `${process.env.VUE_APP_API_BASE_URL}/api/app/article/generate-template`;
+    a.click();
+    a.remove();
+}
+export async function importExcel(params) {
+    let config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+      }
+    return request(`/api/app/article/import-excel`, METHOD.POST, params,config)
+}
 export default {
     getList,
     edit,
     del,
     dels,
     get,
-    exportExcel
+    exportExcel,
+    generateTemplate,
+    importExcel
   }
   

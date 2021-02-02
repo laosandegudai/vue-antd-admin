@@ -53,6 +53,8 @@
           type="primary"
           >新建</a-button
         >
+        <a-button v-if="checkPermission('AbpVnext.Article.Create')" type="primary" icon="import" @click="$refs.articleImportModal.createOrEdit()"> 导入 </a-button>
+        <a-button type="primary" icon="export" @click="exportExcel"> 导出 </a-button>
         <a-dropdown v-if="selectedRows.length > 0">
           <a-menu @click="handleMenuClick" slot="overlay">
             <a-menu-item
@@ -63,7 +65,7 @@
           </a-menu>
           <a-button> 批量操作 <a-icon type="down" /> </a-button>
         </a-dropdown>
-        <a-button type="primary" icon="export" @click="exportExcel"> 导出 </a-button>
+        
       </div>
       <standard-table
         rowKey="id"
@@ -110,6 +112,7 @@
       </standard-table>
     </div>
     <create-form ref="createModal" @ok="handleOk" />
+    <article-import-modal ref="articleImportModal" @ok="loadData" />
   </a-card>
 </template>
 
@@ -119,6 +122,7 @@ import { getList, del, dels,exportExcel } from "@/services/article";
 import CreateForm from "./modules/ArticleForm";
 import { getTrees as getCategorys } from "@/services/articleCategory";
 import { checkPermission } from "@/utils/abp";
+import ArticleImportModal from "./modules/ArticleImportModal";
 const columns = [
   {
     title: "标题",
@@ -148,7 +152,7 @@ const columns = [
 let that;
 export default {
   name: "ArticleList",
-  components: { StandardTable, CreateForm },
+  components: { StandardTable, CreateForm,ArticleImportModal },
   data() {
     return {
       advanced: true,

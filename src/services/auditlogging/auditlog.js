@@ -24,8 +24,28 @@ export function deleteManyAuditLog(ids) {
   return request(`/api/audit-logging/audit-logs/delete-many?${idsStr}`, METHOD.DELETE)
 }
 export function exportExcel(params){
-  const a = document.createElement("a");
-  a.href = `${process.env.VUE_APP_API_BASE_URL}/api/audit-logging/audit-logs/export-excel?${qs.stringify(params)}`;
-  a.click();
-  a.remove();
+  // const a = document.createElement("a");
+  // a.href = `${process.env.VUE_APP_API_BASE_URL}/api/audit-logging/audit-logs/export-excel?${qs.stringify(params)}`;
+  // a.click();
+  // a.remove();
+  let url = `${process.env.VUE_APP_API_BASE_URL}/api/audit-logging/audit-logs/export-excel`;
+  let xhr = new XMLHttpRequest();
+  xhr.open('GET', url, true);
+  xhr.responseType = "blob";
+  xhr.setRequestHeader("tokenId", "your token");
+  xhr.onload = function () {
+    if (this.status === 200) {
+      var blob = this.response;
+      var reader = new FileReader();
+      reader.readAsDataURL(blob);
+      reader.onload = function (e) {
+        var a = document.createElement('a');
+        // a.download = '文章.xls';
+        a.href = e.target.result;
+        a.click();
+        a.remove();
+      }
+    }
+  };
+  xhr.send()
 }
