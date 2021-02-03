@@ -15,7 +15,11 @@
         :label-col="labelCol"
         :wrapper-col="wrapperCol"
       >
-        <a-form-model-item label="分类名称" ref="displayName" prop="displayName">
+        <a-form-model-item
+          label="分类名称"
+          ref="displayName"
+          prop="displayName"
+        >
           <a-input
             v-model="form.displayName"
             placeholder="请输入分类名称"
@@ -38,6 +42,9 @@
           >
           </a-tree-select>
         </a-form-model-item>
+        <a-form-model-item label="图标" prop="iconId">
+          <upload-img v-model="form.iconId" :maxCount="1"></upload-img>
+        </a-form-model-item>
         <a-form-model-item label="排序" help="数字，越小越向前">
           <a-input-number v-model="form.displayOrder" />
         </a-form-model-item>
@@ -47,9 +54,13 @@
 </template>
 
 <script>
-import { get,getTrees,edit } from "@/services/articleCategory";
+import { get, getTrees, edit } from "@/services/articleCategory";
+import UploadImg from '@/components/uploadImg/UploadImg'
 export default {
   name: "CategoryForm",
+  components: {
+    UploadImg
+  },
   data() {
     return {
       labelCol: { span: 7 },
@@ -67,29 +78,35 @@ export default {
         ],
       },
       categorys: [],
-      replaceFields:{children:'children', title:'displayName', key:'id',value:'id' }
+      replaceFields: {
+        children: "children",
+        title: "displayName",
+        key: "id",
+        value: "id",
+      },
     };
   },
-  created() {
-  },
+  created() {},
   methods: {
-    createOrEdit(model){
+    createOrEdit(model) {
       this.getCategorys();
       this.visible = true;
       this.form = model;
-      if(model && model.id){
+      if (model && model.id) {
         this.getFormData(model.id);
       }
     },
     getFormData(id) {
       this.confirmLoading = true;
-      get(id).then((res) => {
-        this.form = {
-          ...res,
-        };
-      }).finally(()=>{
-        this.confirmLoading = false
-      });
+      get(id)
+        .then((res) => {
+          this.form = {
+            ...res,
+          };
+        })
+        .finally(() => {
+          this.confirmLoading = false;
+        });
     },
     getCategorys() {
       getTrees().then((res) => {
@@ -97,8 +114,8 @@ export default {
       });
     },
     handleCancel() {
-      this.visible = false
-      this.currentStep = 0
+      this.visible = false;
+      this.currentStep = 0;
     },
     handleOk() {
       const form = this.$refs.ruleForm;
@@ -111,7 +128,7 @@ export default {
               this.visible = false;
               form.resetFields();
               this.$message.info("操作成功");
-              this.$emit('ok')
+              this.$emit("ok");
             })
             .finally(() => {
               this.confirmLoading = false;
@@ -120,7 +137,7 @@ export default {
           this.confirmLoading = false;
         }
       });
-    }
+    },
   },
 };
 </script>

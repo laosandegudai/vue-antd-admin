@@ -38,6 +38,9 @@
             "
           />
         </a-form-model-item>
+        <a-form-model-item label="封面图" prop="imgId">
+          <upload-img v-model="form.imgId" :maxCount="1"></upload-img>
+        </a-form-model-item>
         <a-form-model-item label="标签" help="多个可用英文逗号分隔开，如：a,b">
           <template v-for="(tag, index) in tags">
             <a-tooltip v-if="tag.length > 20" :key="tag" :title="tag">
@@ -106,10 +109,12 @@ import "quill/dist/quill.snow.css";
 import "quill/dist/quill.bubble.css";
 import { quillEditor } from "vue-quill-editor";
 import quillConfig from "@/utils/quill-config";
+import UploadImg from '@/components/uploadImg/UploadImg'
 export default {
   name: "ArticleForm",
   components: {
-    quillEditor
+    quillEditor,
+    UploadImg
   },
   data() {
     return {

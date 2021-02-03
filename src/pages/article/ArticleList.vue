@@ -82,6 +82,7 @@
         <span slot="creationTime" slot-scope="{ text }">{{
           text | moment
         }}</span>
+        <a-avatar slot="img" slot-scope="{ text }"  shape="square" :src="`${baseURL}/api/file-management/file/${text}/getFile`" />
         <div slot="action" slot-scope="{ record }">
           <template>
             <a-dropdown>
@@ -127,6 +128,11 @@ const columns = [
   {
     title: "标题",
     dataIndex: "title",
+  },
+  {
+    title: "封面图",
+    dataIndex: "imgId",
+    scopedSlots: { customRender: "img" },
   },
   {
     title: "所属类别",
@@ -176,6 +182,7 @@ export default {
         key: "id",
         value: "id",
       },
+      baseURL: process.env.VUE_APP_API_BASE_URL,
     };
   },
   // authorize: {
