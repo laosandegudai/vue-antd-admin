@@ -197,6 +197,15 @@ const options = {
             authority: 'EasyAbp.FileManagement.File',
           },
           component: () => import('@/pages/file-management/File')
+        },
+        {
+          path: 'notification',
+          name: '通知管理',
+          meta: {
+            icon: 'notification',
+            authority: 'EasyAbp.NotificationService.Notification',
+          },
+          component: () => import('@/pages/notification/List')
         }
       ]
     }

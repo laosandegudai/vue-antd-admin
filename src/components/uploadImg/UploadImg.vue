@@ -102,20 +102,19 @@ export default {
       }
     },
     handleCancel() {
-      this.previewVisible = false
+      this.previewVisible = false;
     },
     handlePreview(file) {
-      this.previewImage = file.url || file.thumbUrl
-      this.previewVisible = true
+      this.previewImage = file.url || file.thumbUrl;
+      this.previewVisible = true;
     },
     handleChange({ file, fileList }) {
-      this.fileList = fileList
+      this.fileList = fileList;
       if (file.status == 'done' || file.status == 'removed') {
-        var values = this.fileList.filter(x => x.status == 'done').map(x => x.id || x.response.fileInfo.id)
-        var newValue = this.maxCount == 1 ? values[0] : values
-        this.internelValue = newValue
-        //双向绑定
-        this.$emit('input', newValue)
+        var values = this.fileList.filter(x => x.status == 'done').map(x => x.id || x.response.fileInfo.id);
+        var newValue = this.maxCount == 1 ? values[0] : values;
+        this.internelValue = newValue;
+        this.$emit('input', newValue);
       }
     }
   }
