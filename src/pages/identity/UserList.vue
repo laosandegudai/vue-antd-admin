@@ -1,5 +1,30 @@
 <template>
   <a-card>
+    <div :class="advanced ? 'search' : null">
+      <a-form layout="horizontal">
+        <div :class="advanced ? null : 'fold'">
+          <a-row>
+            <a-col :md="8" :sm="24">
+              <a-form-item
+                label="搜索"
+                :labelCol="{ span: 5 }"
+                :wrapperCol="{ span: 18, offset: 1 }"
+              >
+                <a-input v-model="queryParam.filter" placeholder="用户名/邮箱/姓名/手机号" />
+              </a-form-item>
+            </a-col>
+          </a-row>
+        </div>
+        <span style="float: right; margin-top: 3px">
+          <a-button type="primary" @click="refresh">查询</a-button>
+          <a-button
+            style="margin-left: 8px"
+            @click="() => (this.queryParam = {})"
+            >重置</a-button
+          >
+        </span>
+      </a-form>
+    </div>
     <div>
       <div class="operator">
         <a-button

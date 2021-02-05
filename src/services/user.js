@@ -47,9 +47,15 @@ export function logout() {
 export async function applicationConfiguration() {
   return request(ApplicationConfiguration, METHOD.GET)
 }
+export async function pcLoginAcode(params){
+  return request(`/api/wechat-management/mini-programs/login/pc-login-acode`, METHOD.GET,params)
+}
+
+
 export default {
   login,
   logout,
   getRoutesConfig,
-  applicationConfiguration
+  applicationConfiguration,
+  pcLoginAcode
 }

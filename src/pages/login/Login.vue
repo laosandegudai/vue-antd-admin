@@ -117,13 +117,14 @@
             >登录</a-button
           >
         </a-form-item>
-        <!-- <div>
+        <div>
           其他登录方式
-          <a-icon class="icon" type="alipay-circle" />
+          <a-icon class="icon" type="wechat"  @click="$refs.weChatLoginModal.createOrEdit()" />
+          <!-- <a-icon class="icon" type="alipay-circle" />
           <a-icon class="icon" type="taobao-circle" />
           <a-icon class="icon" type="weibo-circle" />
-          <router-link style="float: right" to="/dashboard/workplace">注册账户</router-link>
-        </div> -->
+          <router-link style="float: right" to="/dashboard/workplace">注册账户</router-link> -->
+        </div>
       </a-form>
       <a-modal
         title="切换租户"
@@ -135,6 +136,7 @@
         <a-input v-model="tenantName" size="large" placeholder="租户名称" />
       </a-modal>
     </div>
+    <we-chat-login-modal ref="weChatLoginModal"  />
   </common-layout>
 </template>
 
@@ -142,16 +144,16 @@
 import CommonLayout from "@/layouts/CommonLayout";
 import {
   login,
-  getRoutesConfig,
   applicationConfiguration,
 } from "@/services/user";
 import { setAuthorization } from "@/utils/request";
 import { loadRoutes } from "@/utils/routerUtil";
 import { mapMutations } from "vuex";
 import { tenantSwitch } from "@/services/multi-tenancy/tenant";
+import WeChatLoginModal from "./modules/WeChatLoginModal";
 export default {
   name: "Login",
-  components: { CommonLayout },
+  components: { CommonLayout,WeChatLoginModal },
   data() {
     return {
       logging: false,
@@ -209,7 +211,6 @@ export default {
         //   this.$message.success(loginRes.message, 3);
         // });
         applicationConfiguration().then((res) => {
-          console.log(res);
           res.currentUser.tenantName=res.currentTenant.name;
           this.setUser(res.currentUser);
           let permissions = this.handlePermissions(res.auth.grantedPolicies);
