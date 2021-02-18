@@ -187,26 +187,50 @@ const options = {
               },
               component: () => import('@/pages/identity/OrganizationList'),
             },
+            {
+              path: 'file',
+              name: '文件管理',
+              meta: {
+                authority: 'EasyAbp.FileManagement.File',
+              },
+              component: () => import('@/pages/file-management/File')
+            },
+            {
+              path: 'notification',
+              name: '通知管理',
+              meta: {
+                authority: 'EasyAbp.NotificationService.Notification',
+              },
+              component: () => import('@/pages/notification/List')
+            },
+            {
+              path: 'setting', 
+              name: '设置',
+              meta: {
+                authority: 'EasyAbp.NotificationService.Notification',
+              },
+              component: () => import('@/pages/setting-management/Setting')
+            },
           ]
         },
         {
-          path: 'file',
-          name: '文件管理',
+          path: 'wechat-management',
+          name: '微信管理',
           meta: {
-            icon: 'folder',
-            authority: 'EasyAbp.FileManagement.File',
+            icon: 'table'
           },
-          component: () => import('@/pages/file-management/File')
+          component: PageView,
+          children: [
+            {
+              path: 'mini-program',
+              name: '小程序管理',
+              meta: {
+                authority: 'EasyAbp.WeChatManagement.MiniPrograms.MiniProgram',
+              },
+              component: () => import('@/pages/wechat-management/MiniProgram'),
+            }
+          ]
         },
-        {
-          path: 'notification',
-          name: '通知管理',
-          meta: {
-            icon: 'notification',
-            authority: 'EasyAbp.NotificationService.Notification',
-          },
-          component: () => import('@/pages/notification/List')
-        }
       ]
     }
   ]
