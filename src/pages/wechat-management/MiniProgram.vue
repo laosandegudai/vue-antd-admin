@@ -25,6 +25,9 @@
         <span slot="creationTime" slot-scope="{ text }">{{
           text | moment
         }}</span>
+        <a-tag slot="bool" slot-scope="{ text }" :color="text?'green':'orange'">
+            {{ text?'是':'否' }}
+          </a-tag>
         <div slot="action" slot-scope="{ record }">
           <template>
             <a-dropdown>
@@ -87,6 +90,7 @@ const columns = [
   {
     title: "是否静态",
     dataIndex: "isStatic",
+    scopedSlots: { customRender: "bool" },
   },
   {
     title: "操作",

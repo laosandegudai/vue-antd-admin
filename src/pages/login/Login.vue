@@ -136,7 +136,7 @@
         <a-input v-model="tenantName" size="large" placeholder="租户名称" />
       </a-modal>
     </div>
-    <we-chat-login-modal ref="weChatLoginModal"  />
+    <we-chat-login-modal ref="weChatLoginModal" @ok="handleOk($event)"  />
   </common-layout>
 </template>
 
@@ -272,6 +272,9 @@ export default {
           this.confirmLoading = false;
         });
     },
+    handleOk(res){
+      this.afterLogin(res);
+    }
   },
 };
 </script>

@@ -42,9 +42,10 @@
           />
         </a-form-model-item>
         <a-form-model-item label="AppSecret" prop="appSecret" >
-          <a-input
+          <a-input-password
             v-model="form.appSecret"
             placeholder="留空则通过第三方平台管理"
+            :visibilityToggle="false"
           />
         </a-form-model-item>
         <a-form-model-item label="Token" prop="token">

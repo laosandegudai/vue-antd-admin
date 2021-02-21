@@ -50,12 +50,15 @@ export async function applicationConfiguration() {
 export async function pcLoginAcode(params){
   return request(`/api/wechat-management/mini-programs/login/pc-login-acode`, METHOD.GET,params)
 }
-
+export async function pcLogin(params){
+  return request(`/api/wechat-management/mini-programs/login/pc-code-login`, METHOD.POST,params)
+}
 
 export default {
   login,
   logout,
   getRoutesConfig,
   applicationConfiguration,
-  pcLoginAcode
+  pcLoginAcode,
+  pcLogin
 }

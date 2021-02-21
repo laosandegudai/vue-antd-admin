@@ -9,15 +9,16 @@
           :tab="group.groupDisplayName"
         >
           <template v-for="(setGroup, gindex) in group.settingInfos">
-            <a-card :key="gindex" :title="setGroup[0].properties.Group2">
+            <a-card :key="gindex" :title="$t(setGroup[0].properties.Group2)">
               <a-form
                 :form="forms[index + '_' + gindex]"
+                :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }"
                 @submit="handleSubmit(index + '_' + gindex, $event)"
               >
                 <a-form-item
                   v-for="settingInfo in setGroup"
                   :key="settingInfo.name"
-                  :label="settingInfo.displayName"
+                  :label="$t(settingInfo.displayName)"
                 >
                   <a-select
                     v-if="settingInfo.properties.Type === 'select'"
@@ -34,7 +35,7 @@
                       :key="index"
                       :value="item"
                     >
-                      {{ item }}
+                      {{ $t(item) }}
                     </a-select-option>
                   </a-select>
                   <a-checkbox
@@ -97,6 +98,7 @@ import {
 } from "@/services/setting-management/setting";
 let that;
 export default {
+  i18n: require('./i18n'),
   data() {
     return {
       labelCol: { span: 7 },
@@ -195,33 +197,6 @@ export default {
             }
           });
         },
-      });
-    },
-    handleOk() {
-      const form = this.$refs.ruleForm;
-      this.confirmLoading = true;
-      form.validate((valid) => {
-        if (valid) {
-          const tempData = { features: [] };
-          this.settingData.map((x) => {
-            x.settingInfos.map((settingInfo) => {
-              tempData.settingInfo.push({
-                name: settingInfo.name,
-                value: settingInfo.value.toString(),
-              });
-            });
-          });
-          setSettingValues(tempData)
-            .then(() => {
-              this.visible = false;
-              this.$message.info("操作成功");
-            })
-            .finally(() => {
-              this.confirmLoading = false;
-            });
-        } else {
-          this.confirmLoading = false;
-        }
       });
     },
     groupBy(array, f) {
