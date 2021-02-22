@@ -34,7 +34,6 @@ export default {
   },
   created() {
     that = this;
-    
   },
   methods: {
     createOrEdit(model) {
@@ -68,10 +67,13 @@ export default {
           if (res.isSuccess) {
             clearInterval(intervalID);
             let obj = JSON.parse(res.rawData);
-            that.$emit('ok',obj)
+            that.$emit("ok", obj);
           }
         });
       }, 3000);
+      this.$once("hook:beforeDestroy", () => {
+        clearInterval(intervalID);
+      });
     },
   },
 };
