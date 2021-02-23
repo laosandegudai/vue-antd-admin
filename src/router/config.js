@@ -228,6 +228,22 @@ const options = {
                 authority: 'EasyAbp.WeChatManagement.MiniPrograms.MiniProgram',
               },
               component: () => import('@/pages/wechat-management/MiniProgram'),
+            },
+            {
+              path: 'mini-program-user-info',
+              name: '个人信息',
+              meta: {
+                authority: 'EasyAbp.WeChatManagement.MiniPrograms.UserInfo',
+              },
+              component: () => import('@/pages/wechat-management/UserInfo'),
+            },
+            {
+              path: 'mini-program-user',
+              name: '用户机密',
+              meta: {
+                authority: 'EasyAbp.WeChatManagement.MiniPrograms.MiniProgramUser',
+              },
+              component: () => import('@/pages/wechat-management/MiniProgramUsers'),
             }
           ]
         },
