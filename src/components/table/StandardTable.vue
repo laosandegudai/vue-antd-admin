@@ -24,6 +24,7 @@
       :expandedRowRender="expandedRowRender"
       @change="onChange"
       :rowSelection="selectedRows ? {selectedRowKeys: selectedRowKeys, onChange: updateSelect} : undefined"
+      :scroll="scroll"
     >
       <template slot-scope="text, record, index" :slot="slot" v-for="slot in Object.keys($scopedSlots).filter(key => key !== 'expandedRowRender') ">
         <slot :name="slot" v-bind="{text, record, index}"></slot>
@@ -54,6 +55,7 @@ export default {
       type: [Object, Boolean],
       default: true
     },
+    scroll:Object,
     selectedRows: Array,
     expandedRowKeys: Array,
     expandedRowRender: Function

@@ -1,5 +1,5 @@
 import {request, METHOD} from '@/utils/request'
-import { transformAbpListQuery } from '@/utils/abp'
+import { transformAbpListQuery,download } from '@/utils/abp'
 import qs from 'querystring'
 export async function getList(params) {
     return request("/api/app/article", METHOD.GET, transformAbpListQuery(params))
@@ -27,16 +27,12 @@ export async function get(id) {
     return request(`/api/app/article/${id}`, METHOD.GET)
 }
 export function exportExcel(params){
-    const a = document.createElement("a");
-    a.href = `${process.env.VUE_APP_API_BASE_URL}/api/app/article/export-excel?${qs.stringify(params)}`;
-    a.click();
-    a.remove();
+    let url =`${process.env.VUE_APP_API_BASE_URL}/api/app/article/export-excel?${qs.stringify(params)}`;
+    download(url,'文章.xlsx');
 }
 export function generateTemplate(){
-    const a = document.createElement("a");
-    a.href = `${process.env.VUE_APP_API_BASE_URL}/api/app/article/generate-template`;
-    a.click();
-    a.remove();
+    let url = `${process.env.VUE_APP_API_BASE_URL}/api/app/article/generate-template`;
+    download(url,'文章导入模板.xlsx');
 }
 export async function importExcel(params) {
     let config = {

@@ -1,4 +1,6 @@
 import store from '@/store'
+import Cookie from 'js-cookie'
+const xsrfHeaderName = 'Authorization'
 const baseListQuery = {
   current: 1,
   pageSize: 10,
@@ -29,5 +31,26 @@ export function checkPermission(policy) {
   } else {
     return false
   }
+}
+export function download(url,name){
+  let xhr = new XMLHttpRequest();
+  xhr.open('GET', url, true);
+  xhr.responseType = "blob";
+  xhr.setRequestHeader("Authorization", Cookie.get(xsrfHeaderName));
+  xhr.onload = function () {
+      if (this.status === 200) {
+          var blob = this.response;
+          var reader = new FileReader();
+          reader.readAsDataURL(blob);
+          reader.onload = function (e) {
+              var a = document.createElement('a');
+              a.download = name;
+              a.href = e.target.result;
+              a.click();
+              a.remove();
+          }
+      }
+  };
+  xhr.send()
 }
 export default baseListQuery
