@@ -2,10 +2,10 @@
   <a-card>
     <div>
       <div class="operator">
-        <a-button v-if="checkPermission('AbpTenantManagement.Tenants.ManageFeatures')" @click="$refs.featureModal.createOrEdit({})" type="primary"
+        <a-button v-if="checkPermission('AbpTenantManagement.Tenants.ManageFeatures')" @click="$refs.featureModal.openModal({})" type="primary"
           >管理Host特性</a-button
         >
-        <a-button v-if="checkPermission('AbpTenantManagement.Tenants.Create')" @click="$refs.createModal.createOrEdit({})" type="primary"
+        <a-button v-if="checkPermission('AbpTenantManagement.Tenants.Create')" @click="$refs.createModal.openModal({})" type="primary"
           >新建</a-button
         >
       </div>
@@ -29,15 +29,15 @@
                 <a-menu-item v-if="checkPermission('AbpTenantManagement.Tenants.Update')">
                   <a
                     href="javascript:;"
-                    @click="$refs.createModal.createOrEdit(record)"
+                    @click="$refs.createModal.openModal(record)"
                     >编辑</a
                   >
                 </a-menu-item>
                 <a-menu-item v-if="checkPermission('AbpTenantManagement.Tenants.ManageConnectionStrings')">
-                  <a href="javascript:;" @click="$refs.connectionstringModal.createOrEdit(record)">链接字符串</a>
+                  <a href="javascript:;" @click="$refs.connectionstringModal.openModal(record)">链接字符串</a>
                 </a-menu-item>
                 <a-menu-item v-if="checkPermission('AbpTenantManagement.Tenants.ManageFeatures')">
-                  <a href="javascript:;" @click="$refs.featureModal.createOrEdit(record)">功能</a>
+                  <a href="javascript:;" @click="$refs.featureModal.openModal(record)">功能</a>
                 </a-menu-item>
                 <a-menu-item v-if="checkPermission('AbpTenantManagement.Tenants.Delete')">
                   <a-popconfirm

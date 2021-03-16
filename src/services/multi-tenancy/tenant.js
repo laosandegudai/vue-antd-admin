@@ -3,7 +3,7 @@ import { transformAbpListQuery } from '@/utils/abp'
 export async function getList(params) {
     return request("/api/multi-tenancy/tenants", METHOD.GET, transformAbpListQuery(params))
 }
-export async function edit(params) {
+export async function createUpdate(params) {
     if (params.id) {
         return request(`/api/multi-tenancy/tenants/${params.id}`, METHOD.PUT, params)
     }
@@ -31,7 +31,7 @@ export function tenantSwitch(params){
 }
 export default {
     getList,
-    edit,
+    createUpdate,
     del,
     get,
     getDefaultConnectionString,

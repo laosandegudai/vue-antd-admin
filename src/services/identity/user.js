@@ -3,11 +3,7 @@ import { transformAbpListQuery } from '@/utils/abp'
 export async function getList(params) {
     return request("/api/identity/users", METHOD.GET, transformAbpListQuery(params))
 }
-export async function edit(params) {
-    // if (params.id) {
-    //     return request(`/api/identity/users/${params.id}`, METHOD.PUT, params)
-    // }
-    // return request("/api/identity/users", METHOD.POST, params)
+export async function createUpdate(params) {
     if (params.id) {
         return request(`/api/identity/users/${params.id}/update-to-organizations`, METHOD.PUT, params)
     }
@@ -30,7 +26,7 @@ export function getOrganizationsByUserId(id, includeDetails = false) {
   }
 export default {
     getList,
-    edit,
+    createUpdate,
     del,
     get,
     getAssignableRoles,

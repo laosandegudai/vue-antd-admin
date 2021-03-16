@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { getOrganizationSingle as get,edit } from "@/services/identity/organization";
+import { getOrganizationSingle as get,createUpdate } from "@/services/identity/organization";
 export default {
   data() {
     return {
@@ -60,7 +60,7 @@ export default {
   created() {
   },
   methods: {
-    createOrEdit(model,currentParentName){
+    openModal(model,currentParentName){
       this.visible = true;
       this.form = model;
       if(model && model.id){
@@ -93,7 +93,7 @@ export default {
       form.validate((valid) => {
         if (valid) {
           let values = this.form;
-          edit(values)
+          createUpdate(values)
             .then((res) => {
               this.visible = false;
               form.resetFields();

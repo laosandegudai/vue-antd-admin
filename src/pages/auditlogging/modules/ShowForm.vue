@@ -148,7 +148,7 @@ export default {
   },
   created() {},
   methods: {
-    show(model) {
+    openModal(model) {
       this.visible = true;
       this.form = model;
       if (model && model.id) {

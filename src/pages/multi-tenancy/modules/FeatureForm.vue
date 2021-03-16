@@ -97,7 +97,7 @@ export default {
     this.featuresQuery.providerName = this.providerName;
   },
   methods: {
-    createOrEdit(model) {
+    openModal(model) {
       this.visible = true;
       this.form = model;
       this.featuresQuery.providerKey = model.id;

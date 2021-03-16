@@ -48,12 +48,12 @@
       <div class="operator">
         <a-button
           v-if="checkPermission('AbpVnext.Article.Create')"
-          @click="$refs.createModal.createOrEdit({})"
+          @click="$refs.createModal.openModal({})"
           icon="plus"
           type="primary"
           >新建</a-button
         >
-        <a-button v-if="checkPermission('AbpVnext.Article.Create')" type="primary" icon="import" @click="$refs.articleImportModal.createOrEdit()"> 导入 </a-button>
+        <a-button v-if="checkPermission('AbpVnext.Article.Create')" type="primary" icon="import" @click="$refs.articleImportModal.openModal()"> 导入 </a-button>
         <a-button type="primary" icon="export" @click="exportExcel"> 导出 </a-button>
         <a-dropdown v-if="selectedRows.length > 0">
           <a-menu @click="handleMenuClick" slot="overlay">
@@ -94,7 +94,7 @@
                 <a-menu-item v-if="checkPermission('AbpVnext.Article.Update')">
                   <a
                     href="javascript:;"
-                    @click="$refs.createModal.createOrEdit(record)"
+                    @click="$refs.createModal.openModal(record)"
                     >编辑</a
                   >
                 </a-menu-item>

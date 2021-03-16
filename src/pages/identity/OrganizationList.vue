@@ -2,7 +2,7 @@
   <a-card>
     <div>
       <div class="operator">
-        <a-button v-if="checkPermission('AbpIdentity.OrganitaionUnits.Create')" @click="$refs.createModal.createOrEdit({})" type="primary"
+        <a-button v-if="checkPermission('AbpIdentity.OrganitaionUnits.Create')" @click="$refs.createModal.openModal({})" type="primary"
           >新建</a-button
         >
         <!-- <a-dropdown v-if="selectedRows.length > 0">
@@ -34,7 +34,7 @@
                   <a
                     href="javascript:;"
                     @click="
-                      $refs.createModal.createOrEdit({ parentId: record.id},`${record.displayName}(${record.code})`)
+                      $refs.createModal.openModal({ parentId: record.id},`${record.displayName}(${record.code})`)
                     "
                     >添加子项</a
                   >
@@ -42,7 +42,7 @@
                 <a-menu-item v-if="checkPermission('AbpIdentity.OrganitaionUnits.Update')">
                   <a
                     href="javascript:;"
-                    @click="$refs.createModal.createOrEdit(record)"
+                    @click="$refs.createModal.openModal(record)"
                     >编辑</a
                   >
                 </a-menu-item>

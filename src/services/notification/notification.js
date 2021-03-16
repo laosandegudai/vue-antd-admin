@@ -3,7 +3,7 @@ import { transformAbpListQuery } from '@/utils/abp'
 export async function getList(params) {
     return request("/api/notification-service/notification", METHOD.GET, transformAbpListQuery(params))
 }
-export async function edit(params) {
+export async function createUpdate(params) {
     if (params.id) {
         return request(`/api/notification-service/notification/${params.id}`, METHOD.PUT, params)
     }

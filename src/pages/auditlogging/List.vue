@@ -177,7 +177,7 @@
               </a>
               <a-menu slot="overlay">
                 <a-menu-item>
-                  <a href="javascript:;" @click="$refs.showModal.show(record)"
+                  <a href="javascript:;" @click="$refs.showModal.openModal(record)"
                     >查看</a
                   >
                 </a-menu-item>

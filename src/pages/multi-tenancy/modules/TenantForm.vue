@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import { get,edit } from "@/services/multi-tenancy/tenant";
+import { get,createUpdate } from "@/services/multi-tenancy/tenant";
 export default {
   name: "TenantForm",
   data() {
@@ -80,7 +80,7 @@ export default {
   created() {
   },
   methods: {
-    createOrEdit(model){
+    openModal(model){
       this.visible = true;
       this.form = model;
       if(model && model.id){
@@ -110,7 +110,7 @@ export default {
       form.validate((valid) => {
         if (valid) {
           let values = this.form;
-          edit(values)
+          createUpdate(values)
             .then((res) => {
               this.visible = false;
               form.resetFields();

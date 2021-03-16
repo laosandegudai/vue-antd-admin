@@ -4,7 +4,7 @@ import qs from 'querystring'
 export async function getList(params) {
     return request("/api/app/article", METHOD.GET, transformAbpListQuery(params))
 }
-export async function edit(params) {
+export async function createUpdate(params) {
     if (params.id) {
         return request(`/api/app/article/${params.id}`, METHOD.PUT, params)
     }
@@ -44,7 +44,7 @@ export async function importExcel(params) {
 }
 export default {
     getList,
-    edit,
+    createUpdate,
     del,
     dels,
     get,

@@ -44,7 +44,7 @@ export default {
   created() {
   },
   methods: {
-    createOrEdit(model){
+    openModal(model){
       this.visible = true;
       this.form = model;
       if(model && model.id){

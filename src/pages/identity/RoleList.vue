@@ -2,7 +2,7 @@
   <a-card>
     <div>
       <div class="operator">
-        <a-button v-if="checkPermission('AbpIdentity.Roles.Create')" @click="$refs.createModal.createOrEdit({})" type="primary"
+        <a-button v-if="checkPermission('AbpIdentity.Roles.Create')" @click="$refs.createModal.openModal({})" type="primary"
           >新建</a-button
         >
       </div>
@@ -32,12 +32,12 @@
                 <a-menu-item v-if="checkPermission('AbpIdentity.Roles.Update')">
                   <a
                     href="javascript:;"
-                    @click="$refs.createModal.createOrEdit(record)"
+                    @click="$refs.createModal.openModal(record)"
                     >编辑</a
                   >
                 </a-menu-item>
                 <a-menu-item v-if="checkPermission('AbpIdentity.Roles.ManagePermissions')">
-                  <a href="javascript:;" @click="$refs.permissionModal.createOrEdit(record)">权限</a>
+                  <a href="javascript:;" @click="$refs.permissionModal.openModal(record)">权限</a>
                 </a-menu-item>
                 <a-menu-item v-if="checkPermission('AbpIdentity.Roles.Delete')">
                   <a-popconfirm

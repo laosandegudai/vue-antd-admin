@@ -78,7 +78,7 @@ export default {
   },
   created() {},
   methods: {
-    createOrEdit() {
+    openModal() {
       this.visible = true;
     },
     handleCancel() {
@@ -118,7 +118,7 @@ export default {
     },
     handleImportRes(res) {
       this.templateErrors = res.templateErrors;
-      if (res.hasError) {
+      if (res.errorFile) {
         this.$confirm({
           title: "导入数据存在校验错误",
           content:

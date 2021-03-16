@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import { get, getTrees, edit } from "@/services/articleCategory";
+import { get, getTrees, createUpdate } from "@/services/articleCategory";
 import UploadImg from '@/components/uploadImg/UploadImg'
 export default {
   name: "CategoryForm",
@@ -88,7 +88,7 @@ export default {
   },
   created() {},
   methods: {
-    createOrEdit(model) {
+    openModal(model) {
       this.getCategorys();
       this.visible = true;
       this.form = model;
@@ -123,7 +123,7 @@ export default {
       form.validate((valid) => {
         if (valid) {
           let values = this.form;
-          edit(values)
+          createUpdate(values)
             .then((res) => {
               this.visible = false;
               form.resetFields();

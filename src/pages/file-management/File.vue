@@ -57,7 +57,7 @@
         <a-button
           v-if="checkPermission('EasyAbp.FileManagement.File.Create')"
           @click="
-            $refs.createModal.createOrEdit({
+            $refs.createModal.openModal({
               fileContainerName: queryParam.fileContainerName,
               ownerUserId: queryParam.ownerUserId,
               parentId: queryParam.parentId,
@@ -70,7 +70,7 @@
         <a-button
           v-if="checkPermission('EasyAbp.FileManagement.File.Create')"
           @click="
-            $refs.uploadModal.createOrEdit({
+            $refs.uploadModal.openModal({
               fileContainerName: queryParam.fileContainerName,
               ownerUserId: queryParam.ownerUserId,
               parentId: queryParam.parentId,

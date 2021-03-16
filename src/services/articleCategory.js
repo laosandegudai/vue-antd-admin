@@ -8,7 +8,7 @@ export async function getList(params) {
 export async function getTrees() {
     return request("/api/app/article-category/trees", METHOD.GET)
 }
-export async function edit(params) {
+export async function createUpdate(params) {
     if (params.id) {
         return request(`/api/app/article-category/${params.id}`, METHOD.PUT, params)
     }
@@ -32,7 +32,7 @@ export async function get(id) {
 }
 export default {
     getList,
-    edit,
+    createUpdate,
     del,
     dels,
     get,

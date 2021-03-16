@@ -5,7 +5,7 @@
       <div class="operator">
         <a-button
           v-if="checkPermission('EasyAbp.WeChatManagement.MiniPrograms.MiniProgram.Create')"
-          @click="$refs.createModal.createOrEdit({})"
+          @click="$refs.createModal.openModal({})"
           icon="plus"
           type="primary"
           >新建</a-button
@@ -39,7 +39,7 @@
                 <a-menu-item v-if="checkPermission('EasyAbp.WeChatManagement.MiniPrograms.MiniProgram.Update')">
                   <a
                     href="javascript:;"
-                    @click="$refs.createModal.createOrEdit(record)"
+                    @click="$refs.createModal.openModal(record)"
                     >编辑</a
                   >
                 </a-menu-item>

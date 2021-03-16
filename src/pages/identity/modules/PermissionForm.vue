@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { get, edit } from "@/services/permission-management/permissions";
+import { get, createUpdate } from "@/services/permission-management/permissions";
 let that;
 export default {
   name: "PermissionForm",
@@ -87,7 +87,7 @@ export default {
     this.permissionsQuery.providerName = this.providerName;
   },
   methods: {
-    createOrEdit(model) {
+    openModal(model) {
       this.visible = true;
       // this.form = model;
       if (this.permissionsQuery.providerName === "R") {
@@ -163,7 +163,7 @@ export default {
               }
             }
           }
-          edit(this.permissionsQuery, { permissions: tempData })
+          createUpdate(this.permissionsQuery, { permissions: tempData })
             .then((res) => {
               this.visible = false;
               form.resetFields();

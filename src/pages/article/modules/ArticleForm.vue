@@ -102,7 +102,7 @@
 </template>
 
 <script>
-import { get,edit } from "@/services/article";
+import { get,createUpdate } from "@/services/article";
 import { getList as getCategorys } from "@/services/articleCategory";
 import "quill/dist/quill.core.css";
 import "quill/dist/quill.snow.css";
@@ -146,7 +146,7 @@ export default {
     this.getCategorys();
   },
   methods: {
-    createOrEdit(model){
+    openModal(model){
       this.visible = true;
       this.form = model;
       if(model && model.id){
@@ -209,7 +209,7 @@ export default {
       form.validate((valid) => {
         if (valid) {
           let values = this.form;
-          edit(values)
+          createUpdate(values)
             .then((res) => {
               this.visible = false;
               form.resetFields();

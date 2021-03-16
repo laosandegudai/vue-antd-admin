@@ -99,7 +99,7 @@
 <script>
 import {
   get,
-  edit,
+  createUpdate,
   getAssignableRoles,
   getRolesByUserId,
   getOrganizationsByUserId,
@@ -182,7 +182,7 @@ export default {
   },
   created() {},
   methods: {
-    createOrEdit(model) {
+    openModal(model) {
       this.visible = true;
       // this.form = model;
       if (model && model.id) {
@@ -226,7 +226,7 @@ export default {
       form.validate((valid) => {
         if (valid) {
           let values = this.form;
-          edit(values)
+          createUpdate(values)
             .then((res) => {
               this.visible = false;
               form.resetFields();

@@ -61,7 +61,7 @@ export function updateOrganization(id, payload) {
 export function deleteOrganization(id) {
   return request(`/api/identity/organizations/${id}`, METHOD.DELETE)
 }
-export async function edit(params) {
+export async function createUpdate(params) {
   if (params.id) {
       return request(`/api/identity/organizations/${params.id}`, METHOD.PUT, params)
   }
