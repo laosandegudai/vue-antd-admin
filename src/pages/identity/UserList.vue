@@ -122,6 +122,8 @@ export default {
       pagination: {
         pageSize: 10,
         current: 1,
+        showQuickJumper:true,
+        showTotal:total => `总计 ${total} 条`
       },
       sorter: {
         field: "id",

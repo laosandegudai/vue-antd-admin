@@ -103,7 +103,7 @@
 
 <script>
 import { get,createUpdate } from "@/services/article";
-import { getList as getCategorys } from "@/services/articleCategory";
+import { getTrees as getCategorys } from "@/services/articleCategory";
 import "quill/dist/quill.core.css";
 import "quill/dist/quill.snow.css";
 import "quill/dist/quill.bubble.css";
@@ -168,7 +168,7 @@ export default {
     },
     getCategorys() {
       getCategorys().then((res) => {
-        this.categorys = res.items;
+        this.categorys = res;
       });
     },
     handleClose(removedTag) {

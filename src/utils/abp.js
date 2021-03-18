@@ -22,6 +22,7 @@ export function transformAbpListQuery(query) {
   delete abpListQuery.current
   delete abpListQuery.pageSize
   delete abpListQuery.sorter
+  delete abpListQuery.showTotal
   return abpListQuery
 }
 export function checkPermission(policy) {
