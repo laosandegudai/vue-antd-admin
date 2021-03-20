@@ -146,6 +146,7 @@
         @change="handleTableChange"
         :pagination="pagination"
         :loading="loading"
+        :scroll="{ x: 2000,y: 600}"
       >
         <div slot="RequestInfo" slot-scope="{ record }">
           <a-tag :color="record.httpStatusCode | requestStatusCode">
@@ -244,6 +245,7 @@ const columns = [
   {
     title: "操作",
     scopedSlots: { customRender: "action" },
+    fixed: 'right',
   },
 ];
 let that;

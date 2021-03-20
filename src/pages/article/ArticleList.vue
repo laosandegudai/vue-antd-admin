@@ -153,6 +153,7 @@ const columns = [
   {
     title: "操作",
     scopedSlots: { customRender: "action" },
+    fixed: 'right',
   },
 ];
 let that;

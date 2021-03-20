@@ -217,7 +217,7 @@ const options = {
           path: 'wechat-management',
           name: '微信管理',
           meta: {
-            icon: 'table'
+            icon: 'wechat'
           },
           component: PageView,
           children: [
@@ -244,6 +244,36 @@ const options = {
                 authority: 'EasyAbp.WeChatManagement.MiniPrograms.MiniProgramUser',
               },
               component: () => import('@/pages/wechat-management/MiniProgramUsers'),
+            }
+          ]
+        },
+        {
+          path: 'identity-server',
+          name: 'Identity Server',
+          meta: {
+            icon: 'warning',
+          },
+          component: BlankView,
+          children: [
+            {
+              path: 'clients',
+              name: '客户端',
+              component: () => import('@/pages/exception/404')
+            },
+            {
+              path: 'identity-resources',
+              name: 'Identity资源',
+              component: () => import('@/pages/exception/404')
+            },
+            {
+              path: 'api-resources',
+              name: 'Api资源',
+              component: () => import('@/pages/exception/404')
+            },
+            {
+              path: 'api-scopes',
+              name: 'Api Scope',
+              component: () => import('@/pages/exception/404')
             }
           ]
         },
