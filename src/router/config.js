@@ -211,6 +211,14 @@ const options = {
               },
               component: () => import('@/pages/setting-management/Setting')
             },
+            {
+              path: 'data-dictionary',
+              name: '数据字典',
+              meta: {
+                authority: 'EasyAbp.Abp.DataDictionary.DataDictionary',
+              },
+              component: () => import('@/pages/data-dictionary/DataDictionary')
+            },
           ]
         },
         {
