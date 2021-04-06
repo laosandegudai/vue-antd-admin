@@ -162,6 +162,9 @@ export default {
         this.form = {
           ...res,
         };
+        if(res.tags){
+          this.tags=res.tags.split(",");
+        }
       }).finally(()=>{
         this.confirmLoading = false
       });
@@ -209,6 +212,7 @@ export default {
       form.validate((valid) => {
         if (valid) {
           let values = this.form;
+          values.tags=this.tags.toString();
           createUpdate(values)
             .then((res) => {
               this.visible = false;
