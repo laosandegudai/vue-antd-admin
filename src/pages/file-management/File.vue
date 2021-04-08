@@ -161,6 +161,7 @@ import UploadModal from "./modules/UploadModal";
 import { getList as getUsers } from "@/services/identity/user";
 import { mapGetters } from "vuex";
 import { checkPermission } from '@/utils/abp';
+import { download} from '@/utils/abp'
 const columns = [
   {
     title: "文件名",
@@ -332,11 +333,7 @@ export default {
     },
     download(id) {
       getDownloadInfo(id).then((res) => {
-        const a = document.createElement("a");
-        a.download = res.expectedFileName;
-        a.href = res.downloadUrl;
-        a.click();
-        a.remove();
+        download(res.downloadUrl,res.expectedFileName);
       });
     },
   },

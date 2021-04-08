@@ -38,7 +38,7 @@ export async function createDirectory(params){
     return request(`/api/file-management/file/create-directory`, METHOD.POST, params)
 }
 export async function getDownloadInfo(id){
-    return request(`/api/file-management/file/${id}/downloadInfo`, METHOD.GET)
+    return request(`/api/file-management/file/${id}/download-info`, METHOD.GET)
 }
 // export default {
 //     getList,
