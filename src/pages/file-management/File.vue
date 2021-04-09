@@ -160,8 +160,7 @@ import CreateDirectoryModal from "./modules/CreateDirectoryModal";
 import UploadModal from "./modules/UploadModal";
 import { getList as getUsers } from "@/services/identity/user";
 import { mapGetters } from "vuex";
-import { checkPermission } from '@/utils/abp';
-import { download} from '@/utils/abp'
+import { checkPermission,download } from '@/utils/abp';
 const columns = [
   {
     title: "文件名",

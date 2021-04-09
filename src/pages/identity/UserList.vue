@@ -10,7 +10,46 @@
                 :labelCol="{ span: 5 }"
                 :wrapperCol="{ span: 18, offset: 1 }"
               >
-                <a-input v-model="queryParam.filter" placeholder="用户名/邮箱/姓名/手机号" />
+                <a-input
+                  v-model="queryParam.filter"
+                  placeholder="用户名/邮箱/姓名/手机号"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :md="8" :sm="24">
+              <a-form-item
+                label="角色"
+                :labelCol="{ span: 5 }"
+                :wrapperCol="{ span: 18, offset: 1 }"
+              >
+                <a-select
+                  v-model="queryParam.roleId"
+                  allowClear	
+                  @change="handleChange"
+                >
+                  <a-select-option v-for="r in roles" :key="r.id" :value="r.id">
+                    {{ r.name }}
+                  </a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+            <a-col :md="8" :sm="24">
+              <a-form-item
+                label="组织单元"
+                :labelCol="{ span: 5 }"
+                :wrapperCol="{ span: 18, offset: 1 }"
+              >
+                <a-tree-select
+                  v-model="queryParam.organizationUnitId"
+                  style="width: 100%"
+                  :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+                  :tree-data="organizations"
+                  :replaceFields="replaceFields"
+                  placeholder="请选择"
+                  tree-default-expand-all
+                  allowClear
+                >
+                </a-tree-select>
               </a-form-item>
             </a-col>
           </a-row>
@@ -28,8 +67,9 @@
     <div>
       <div class="operator">
         <a-button
-        v-if="checkPermission('AbpIdentity.Users.Create')"
-        @click="$refs.createModal.openModal({})" type="primary"
+          v-if="checkPermission('AbpIdentity.Users.Create')"
+          @click="$refs.createModal.openModal({})"
+          type="primary"
           >新建</a-button
         >
       </div>
@@ -48,6 +88,7 @@
           <a-tag color="blue" v-if="record.isDefault">默认</a-tag>
           <a-tag color="blue" v-if="record.isPublic">公开</a-tag>
         </span>
+        <span slot="sex" slot-scope="{ text }">{{ text.Sex | sexFilter }}</span>
         <div slot="action" slot-scope="{ record }">
           <template>
             <a-dropdown>
@@ -63,8 +104,14 @@
                     >编辑</a
                   >
                 </a-menu-item>
-                <a-menu-item v-if="checkPermission('AbpIdentity.Users.ManagePermissions')">
-                  <a href="javascript:;" @click="$refs.permissionModal.openModal(record)">权限</a>
+                <a-menu-item
+                  v-if="checkPermission('AbpIdentity.Users.ManagePermissions')"
+                >
+                  <a
+                    href="javascript:;"
+                    @click="$refs.permissionModal.openModal(record)"
+                    >权限</a
+                  >
                 </a-menu-item>
                 <a-menu-item v-if="checkPermission('AbpIdentity.Users.Delete')">
                   <a-popconfirm
@@ -81,20 +128,30 @@
       </standard-table>
     </div>
     <create-form ref="createModal" @ok="handleOk" />
-    <permission-form ref="permissionModal" provider-name="U"/>
+    <permission-form ref="permissionModal" provider-name="U" />
   </a-card>
 </template>
 
 <script>
 import StandardTable from "@/components/table/StandardTable";
-import { getList, del } from "@/services/identity/user";
+import { getListWithDetails, del } from "@/services/identity/user";
+import { getAll } from "@/services/identity/role";
+import { getOrganizationsAll } from "@/services/identity/organization";
 import CreateForm from "./modules/UserForm";
 import PermissionForm from "./modules/PermissionForm";
-import { checkPermission } from '@/utils/abp'
+import { checkPermission } from "@/utils/abp";
 const columns = [
   {
     title: "用户名称",
     dataIndex: "userName",
+  },
+  {
+    title: "姓",
+    dataIndex: "surname",
+  },
+  {
+    title: "名称",
+    dataIndex: "name",
   },
   {
     title: "邮箱地址",
@@ -105,14 +162,33 @@ const columns = [
     dataIndex: "phoneNumber",
   },
   {
+    title: "性别",
+    dataIndex: "extraProperties",
+    scopedSlots: { customRender: "sex" },
+  },
+  {
     title: "操作",
     scopedSlots: { customRender: "action" },
   },
 ];
+const sexMap = {
+  0: {
+    name: "Unknown",
+    text: "未知",
+  },
+  1: {
+    name: "Man",
+    text: "男",
+  },
+  2: {
+    name: "Woman",
+    text: "女",
+  },
+};
 let that;
 export default {
   name: "UserList",
-  components: { StandardTable, CreateForm,PermissionForm },
+  components: { StandardTable, CreateForm, PermissionForm },
   data() {
     return {
       advanced: true,
@@ -122,8 +198,8 @@ export default {
       pagination: {
         pageSize: 10,
         current: 1,
-        showQuickJumper:true,
-        showTotal:total => `总计 ${total} 条`
+        showQuickJumper: true,
+        showTotal: (total) => `总计 ${total} 条`,
       },
       sorter: {
         field: "id",
@@ -131,15 +207,32 @@ export default {
       },
       loading: false,
       queryParam: {},
-      categorys: [],
+      roles: [],
+      organizations: [],
+      replaceFields: {
+        children: "children",
+        title: "displayName",
+        key: "id",
+        value: "id",
+      },
     };
   },
   // authorize: {
   //   deleteRecord: "delete",
   // },
   mounted() {
-    that=this;
+    that = this;
     this.loadData();
+    this.getRoles();
+    this.getOrganizations();
+  },
+  filters: {
+    sexFilter(key) {
+      if (!key) {
+        return "";
+      }
+      return sexMap[key].text;
+    },
   },
   methods: {
     checkPermission,
@@ -156,7 +249,7 @@ export default {
       const pager = { ...this.pagination };
       pager.current = pagination.current;
       this.pagination = pager;
-      if(sorter.field) this.sorter = sorter;
+      if (sorter.field) this.sorter = sorter;
       this.loadData();
     },
     loadData() {
@@ -166,7 +259,7 @@ export default {
         ...this.queryParam,
         sorter: this.sorter,
       };
-      getList(params)
+      getListWithDetails(params)
         .then((res) => {
           const pagination = { ...this.pagination };
           pagination.total = res.totalCount;
@@ -181,6 +274,16 @@ export default {
       this.pagination.current = 1;
       this.loadData();
     },
+    getRoles() {
+      getAll().then((res) => {
+        this.roles = res.items;
+      });
+    },
+    getOrganizations(){
+      getOrganizationsAll().then((res) => {
+        this.organizations = res.items;
+      });
+    }
   },
 };
 </script>

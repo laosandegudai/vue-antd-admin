@@ -34,6 +34,12 @@
             <a-form-model-item label="姓">
               <a-input v-model="form.surname" />
             </a-form-model-item>
+            <a-form-model-item label="性别">
+              <a-radio-group v-model="form.extraProperties.Sex">
+                <a-radio :value="1">男</a-radio>
+                <a-radio :value="2">女</a-radio>
+              </a-radio-group>
+            </a-form-model-item>
             <a-form-model-item
               label="密码"
               ref="password"
@@ -157,6 +163,7 @@ export default {
       confirmLoading: false,
       form: {
         orgIds: [],
+        extraProperties:{Sex:0}
       },
       rules: {
         userName: [

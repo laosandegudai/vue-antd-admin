@@ -3,6 +3,9 @@ import { transformAbpListQuery } from '@/utils/abp'
 export async function getList(params) {
     return request("/api/identity/roles", METHOD.GET, transformAbpListQuery(params))
 }
+export async function getAll(params) {
+    return request("/api/identity/roles/all", METHOD.GET, params)
+}
 export async function createUpdate(params) {
     if (params.id) {
         return request(`/api/identity/roles/${params.id}`, METHOD.PUT, params)
@@ -17,6 +20,7 @@ export async function get(id) {
 }
 export default {
     getList,
+    getAll,
     createUpdate,
     del,
     get

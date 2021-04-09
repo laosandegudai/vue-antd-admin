@@ -3,6 +3,9 @@ import { transformAbpListQuery } from '@/utils/abp'
 export async function getList(params) {
     return request("/api/identity/users", METHOD.GET, transformAbpListQuery(params))
 }
+export async function getListWithDetails(params) {
+    return request("/api/identity/users/details", METHOD.GET, transformAbpListQuery(params))
+}
 export async function createUpdate(params) {
     if (params.id) {
         return request(`/api/identity/users/${params.id}/update-to-organizations`, METHOD.PUT, params)
@@ -26,6 +29,7 @@ export function getOrganizationsByUserId(id, includeDetails = false) {
   }
 export default {
     getList,
+    getListWithDetails,
     createUpdate,
     del,
     get,
