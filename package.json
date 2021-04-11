@@ -26,6 +26,7 @@
     "js-cookie": "^2.2.1",
     "mockjs": "^1.1.0",
     "nprogress": "^0.2.0",
+    "qrcodejs2": "^0.0.2",
     "uuid": "^8.3.2",
     "viser-vue": "^2.4.8",
     "vue": "^2.6.11",

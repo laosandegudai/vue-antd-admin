@@ -53,8 +53,17 @@
           type="primary"
           >新建</a-button
         >
-        <a-button v-if="checkPermission('AbpVnext.Article.Create')" type="primary" icon="import" @click="$refs.articleImportModal.openModal()"> 导入 </a-button>
-        <a-button type="primary" icon="export" @click="exportExcel"> 导出 </a-button>
+        <a-button
+          v-if="checkPermission('AbpVnext.Article.Create')"
+          type="primary"
+          icon="import"
+          @click="$refs.articleImportModal.openModal()"
+        >
+          导入
+        </a-button>
+        <a-button type="primary" icon="export" @click="exportExcel">
+          导出
+        </a-button>
         <a-dropdown v-if="selectedRows.length > 0">
           <a-menu @click="handleMenuClick" slot="overlay">
             <a-menu-item
@@ -65,7 +74,26 @@
           </a-menu>
           <a-button> 批量操作 <a-icon type="down" /> </a-button>
         </a-dropdown>
-        
+        <a-dropdown>
+          <a-button icon="printer" type="primary">
+            打印选项
+            <a-icon type="down" />
+          </a-button>
+          <a-menu slot="overlay">
+            <a-menu-item type="primary" @click="printInfo(0)"
+              >直接打印</a-menu-item
+            >
+            <a-menu-item type="primary" @click="printInfo(1)"
+              >打印预览</a-menu-item
+            >
+            <a-menu-item type="primary" @click="printInfo(2)"
+              >打印维护</a-menu-item
+            >
+            <a-menu-item type="primary" @click="printInfo(3)"
+              >打印设计</a-menu-item
+            >
+          </a-menu>
+        </a-dropdown>
       </div>
       <standard-table
         rowKey="id"
@@ -82,7 +110,12 @@
         <span slot="creationTime" slot-scope="{ text }">{{
           text | moment
         }}</span>
-        <a-avatar slot="img" slot-scope="{ text }"  shape="square" :src="`${baseURL}/api/file-management/file/${text}/getFile`" />
+        <a-avatar
+          slot="img"
+          slot-scope="{ text }"
+          shape="square"
+          :src="`${baseURL}/api/file-management/file/${text}/getFile`"
+        />
         <div slot="action" slot-scope="{ record }">
           <template>
             <a-dropdown>
@@ -113,17 +146,26 @@
       </standard-table>
     </div>
     <create-form ref="createModal" @ok="handleOk" />
-    <article-import-modal ref="articleImportModal" @ok="loadData" />
+    <import-modal ref="articleImportModal" @ok="loadData" />
+    <device-tag ref="deviceTag" @ok="loadData" />
+    <div id="olstyle1">
+      .assets-tag{ display: none; text-align: center; } .assets-tag
+      table,tr,th,td{ border:1px solid #000; } .assets-tag th{ text-align:
+      center; font-size: 24px; } .assets-tag .lable{ width: 80px; } .assets-tag
+      .text{ width: 200px; }
+    </div>
   </a-card>
 </template>
 
 <script>
 import StandardTable from "@/components/table/StandardTable";
-import { getList, del, dels,exportExcel } from "@/services/article";
+import { getList, del, dels, exportExcel } from "@/services/article";
 import CreateForm from "./modules/ArticleForm";
 import { getTrees as getCategorys } from "@/services/articleCategory";
 import { checkPermission } from "@/utils/abp";
-import ArticleImportModal from "./modules/ArticleImportModal";
+import ImportModal from "./modules/ArticleImportModal";
+import { getLodop } from "@/utils/LodopFuncs.js";
+import DeviceTag from "@/components/module/device/deviceTag";
 const columns = [
   {
     title: "标题",
@@ -153,13 +195,13 @@ const columns = [
   {
     title: "操作",
     scopedSlots: { customRender: "action" },
-    fixed: 'right',
+    fixed: "right",
   },
 ];
 let that;
 export default {
   name: "ArticleList",
-  components: { StandardTable, CreateForm,ArticleImportModal },
+  components: { StandardTable, CreateForm, ImportModal, DeviceTag },
   data() {
     return {
       advanced: true,
@@ -169,8 +211,8 @@ export default {
       pagination: {
         pageSize: 10,
         current: 1,
-        showQuickJumper:true,
-        showTotal:total => `总计 ${total} 条`
+        showQuickJumper: true,
+        showTotal: (total) => `总计 ${total} 条`,
       },
       sorter: {
         field: "displayOrder",
@@ -195,7 +237,6 @@ export default {
     that = this;
     this.loadData();
     this.getCategorys();
-    console.log("permissions", this.permissions);
   },
   methods: {
     checkPermission,
@@ -230,13 +271,15 @@ export default {
             });
           },
         });
+      } else if (e.key === "print") {
+        this.printInfo();
       }
     },
     handleTableChange(pagination, filters, sorter) {
       const pager = { ...this.pagination };
       pager.current = pagination.current;
       this.pagination = pager;
-      if(sorter.field) this.sorter = sorter;
+      if (sorter.field) this.sorter = sorter;
       this.loadData();
     },
     loadData() {
@@ -266,13 +309,100 @@ export default {
         this.categorys = res;
       });
     },
-    exportExcel(){
+    exportExcel() {
       let params = {
         ...this.queryParam,
         sorter: this.sorter,
       };
       exportExcel(params);
-    }
+    },
+    //以下为临时测试打印
+    // 打印
+    handleReview(index, row) {
+      this.getPrintData(row.printUrl);
+    },
+    // 获取面单信息数组数据
+    async getPrintData(url) {
+      if (url) {
+        this.printUrlList = url.split(";");
+        this.printInfo();
+      }
+    },
+    // 打印面单
+    async printInfo(s) {
+      for await (const item of this.selectedRows) {
+        this.printEveryItem(item, s);
+      }
+    },
+    // 打印每项
+    printEveryItem(item, s) {
+      let LODOP = getLodop(); //调用getLodop获取LODOP对象
+      return new Promise(function (resolve) {
+        setTimeout(() => {
+          LODOP.PRINT_INIT("");
+          console.log(that.$refs.deviceTag);
+          var olstyle1 =
+        "<style>" + document.getElementById("olstyle1") + "</style>";
+          // let strStyleCSS = `<style type='text/css' rel='stylesheet'>.img1{display:block;margin:10px;width:360;height:360}</style>`;
+          let html = `<head>${olstyle1}</head><body>${that.$refs.deviceTag.$el.innerHTML}<body>`;
+
+          LODOP.ADD_PRINT_HTM(0, 0, 380, 380, html);
+          LODOP.SET_PRINT_PAGESIZE(1, 1000, 1000, "");
+          if (s == 0) {
+            LODOP.PRINT(); //直接打印
+          }
+          if (s == 1) {
+            LODOP.PREVIEW(); //打印预览
+          }
+          if (s == 2) {
+            LODOP.PRINT_SETUP(); //打印维护
+          }
+          if (s == 3) {
+            LODOP.PRINT_DESIGN(); //打印设计
+          }
+        }, 1000);
+      });
+    },
+    printPreview(s) {
+      let selectedRowKeys = this.selectedRows.map((x) => x.id);
+      for (const item of selectedRowKeys) {
+        this.CreateOneFormPage(s);
+      }
+    },
+    CreateOneFormPage(s) {
+      LODOP = getLodop();
+      //样式
+      var olstyle1 =
+        "<style>" + document.getElementById("olstyle1") + "</style>";
+      var body =
+        olstyle1 + "<body>" + that.$refs.deviceTag.$el.innerHTML + "</body>";
+      LODOP.PRINT_INIT("订单"); //打印初始化
+      LODOP.SET_PRINT_STYLE("FontSize", 18); //设置对象风格
+      LODOP.SET_PRINT_STYLE("Bold", 1); //设置对象风格
+      LODOP.ADD_PRINT_TEXT(50, 521, 130, 39, this.description); //增加纯文本项
+      LODOP.SET_PRINT_PAGESIZE(0, 2000, 2000, ""); //设定纸张大小
+      LODOP.SET_PRINT_MODE("PRINT_PAGE_PERCENT", "55%"); //设置缩放
+      LODOP.SET_PREVIEW_WINDOW(2, 2, 0, 0, 0, ""); //设置窗口
+      // 打印二维码
+      // LODOP.ADD_PRINT_BARCODE(23,23,233,233,"QRCode","https://blog.csdn.net/qq_43652509");
+      //打印网址
+      // LODOP.ADD_PRINT_URL(222,2000,2000,233,"https://blog.csdn.net/qq_43652509");
+      //打印图片
+      // LODOP.ADD_PRINT_IMAGE(100,100,400,400,"<img border='0' src='http://s1.sinaimg.cn/middle/4fe4ba17hb5afe2caa990&690' width='345' height='250'>");
+      LODOP.ADD_PRINT_HTM(88, 20, 2000, 2000, body); //增加超文本项
+      if (s == 0) {
+        LODOP.PRINT(); //直接打印
+      }
+      if (s == 1) {
+        LODOP.PREVIEW(); //打印预览
+      }
+      if (s == 2) {
+        LODOP.PRINT_SETUP(); //打印维护
+      }
+      if (s == 3) {
+        LODOP.PRINT_DESIGN(); //打印设计
+      }
+    },
   },
 };
 </script>
