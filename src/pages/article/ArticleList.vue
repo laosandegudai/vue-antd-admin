@@ -74,26 +74,6 @@
           </a-menu>
           <a-button> 批量操作 <a-icon type="down" /> </a-button>
         </a-dropdown>
-        <a-dropdown>
-          <a-button icon="printer" type="primary">
-            打印选项
-            <a-icon type="down" />
-          </a-button>
-          <a-menu slot="overlay">
-            <a-menu-item type="primary" @click="printInfo(0)"
-              >直接打印</a-menu-item
-            >
-            <a-menu-item type="primary" @click="printInfo(1)"
-              >打印预览</a-menu-item
-            >
-            <a-menu-item type="primary" @click="printInfo(2)"
-              >打印维护</a-menu-item
-            >
-            <a-menu-item type="primary" @click="printInfo(3)"
-              >打印设计</a-menu-item
-            >
-          </a-menu>
-        </a-dropdown>
       </div>
       <standard-table
         rowKey="id"
@@ -147,13 +127,6 @@
     </div>
     <create-form ref="createModal" @ok="handleOk" />
     <import-modal ref="articleImportModal" @ok="loadData" />
-    <device-tag v-show="false" ref="deviceTag" @ok="loadData" />
-    <div v-show="false" ref="deviceTagStyle">
-      .assets-tag{ display: none; text-align: center; } .assets-tag
-      table,tr,th,td{ border:1px solid #000; } .assets-tag th{ text-align:
-      center; font-size: 24px; } .assets-tag .lable{ width: 80px; } .assets-tag
-      .text{ width: 200px; }
-    </div>
   </a-card>
 </template>
 
@@ -164,8 +137,6 @@ import CreateForm from "./modules/ArticleForm";
 import { getTrees as getCategorys } from "@/services/articleCategory";
 import { checkPermission } from "@/utils/abp";
 import ImportModal from "./modules/ArticleImportModal";
-import { getLodop } from "@/utils/LodopFuncs.js";
-import DeviceTag from "@/components/module/device/deviceTag";
 const columns = [
   {
     title: "标题",
@@ -201,7 +172,7 @@ const columns = [
 let that;
 export default {
   name: "ArticleList",
-  components: { StandardTable, CreateForm, ImportModal, DeviceTag },
+  components: { StandardTable, CreateForm, ImportModal},
   data() {
     return {
       advanced: true,
@@ -315,39 +286,6 @@ export default {
         sorter: this.sorter,
       };
       exportExcel(params);
-    },
-    //以下为临时测试打印
-    // 打印面单
-    async printInfo(s) {
-      for await (const item of this.selectedRows) {
-        this.printEveryItem(item, s);
-      }
-    },
-    // 打印每项
-    printEveryItem(item, s) {
-      let LODOP = getLodop(); //调用getLodop获取LODOP对象
-      return new Promise(function (resolve) {
-        setTimeout(() => {
-          LODOP.PRINT_INIT("");
-          let strStyleCSS = `<style type='text/css' rel='stylesheet'>${that.$refs.deviceTagStyle.innerHTML}</style>`;
-          let html = `<head>${strStyleCSS}</head><body>${that.$refs.deviceTag.$el.innerHTML}<body>`;
-          console.log(html);
-          LODOP.ADD_PRINT_HTM(0, 0, '100%', '100%', html);
-          LODOP.SET_PRINT_PAGESIZE(1, 1000, 1000, "");
-          if (s == 0) {
-            LODOP.PRINT(); //直接打印
-          }
-          if (s == 1) {
-            LODOP.PREVIEW(); //打印预览
-          }
-          if (s == 2) {
-            LODOP.PRINT_SETUP(); //打印维护
-          }
-          if (s == 3) {
-            LODOP.PRINT_DESIGN(); //打印设计
-          }
-        }, 1000);
-      });
     },
   },
 };
