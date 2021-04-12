@@ -147,8 +147,8 @@
     </div>
     <create-form ref="createModal" @ok="handleOk" />
     <import-modal ref="articleImportModal" @ok="loadData" />
-    <device-tag ref="deviceTag" @ok="loadData" />
-    <div id="olstyle1">
+    <device-tag v-show="false" ref="deviceTag" @ok="loadData" />
+    <div v-show="false" ref="deviceTagStyle">
       .assets-tag{ display: none; text-align: center; } .assets-tag
       table,tr,th,td{ border:1px solid #000; } .assets-tag th{ text-align:
       center; font-size: 24px; } .assets-tag .lable{ width: 80px; } .assets-tag
@@ -329,13 +329,10 @@ export default {
       return new Promise(function (resolve) {
         setTimeout(() => {
           LODOP.PRINT_INIT("");
-          console.log(that.$refs.deviceTag);
-          var olstyle1 =
-        "<style>" + document.getElementById("olstyle1") + "</style>";
-          // let strStyleCSS = `<style type='text/css' rel='stylesheet'>.img1{display:block;margin:10px;width:360;height:360}</style>`;
-          let html = `<head>${olstyle1}</head><body>${that.$refs.deviceTag.$el.innerHTML}<body>`;
-
-          LODOP.ADD_PRINT_HTM(0, 0, 380, 380, html);
+          let strStyleCSS = `<style type='text/css' rel='stylesheet'>${that.$refs.deviceTagStyle.innerHTML}</style>`;
+          let html = `<head>${strStyleCSS}</head><body>${that.$refs.deviceTag.$el.innerHTML}<body>`;
+          console.log(html);
+          LODOP.ADD_PRINT_HTM(0, 0, '100%', '100%', html);
           LODOP.SET_PRINT_PAGESIZE(1, 1000, 1000, "");
           if (s == 0) {
             LODOP.PRINT(); //直接打印
@@ -352,7 +349,6 @@ export default {
         }, 1000);
       });
     },
-    
   },
 };
 </script>
