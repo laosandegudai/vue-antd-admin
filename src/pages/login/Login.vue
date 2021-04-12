@@ -9,8 +9,6 @@
     </div>
     <div class="login">
       <a-form @submit="onSubmit" :form="form">
-        <!-- <a-tabs size="large" :tabBarStyle="{textAlign: 'center'}" style="padding: 0 2px;">
-          <a-tab-pane tab="账户密码登录" key="1"> -->
         <a-alert
           type="error"
           :closable="true"
@@ -31,21 +29,6 @@
               切换
             </a-button>
           </a-input>
-          <!-- <a-input-search
-            placeholder="租户未选择"
-           
-            size="large"
-          >
-            <a-button slot="enterButton" @click="test"> 切换 </a-button>
-          </a-input-search> -->
-          <!-- <a-input
-            autocomplete="autocomplete"
-            size="large"
-            placeholder="租户"
-            v-decorator="['tenant']"
-          >
-            <a-icon slot="prefix" type="user" />
-          </a-input> -->
         </a-form-item>
         <a-form-item>
           <a-input
@@ -82,30 +65,8 @@
             <a-icon slot="prefix" type="lock" />
           </a-input>
         </a-form-item>
-        <!-- </a-tab-pane> -->
-        <!-- <a-tab-pane tab="手机号登录" key="2">
-            <a-form-item>
-              <a-input size="large" placeholder="mobile number">
-                <a-icon slot="prefix" type="mobile" />
-              </a-input>
-            </a-form-item>
-            <a-form-item>
-              <a-row :gutter="8" style="margin: 0 -4px">
-                <a-col :span="16">
-                  <a-input size="large" placeholder="captcha">
-                    <a-icon slot="prefix" type="mail" />
-                  </a-input>
-                </a-col>
-                <a-col :span="8" style="padding-left: 4px">
-                  <a-button style="width: 100%" class="captcha-button" size="large">获取验证码</a-button>
-                </a-col>
-              </a-row>
-            </a-form-item>
-          </a-tab-pane> -->
-        <!-- </a-tabs> -->
         <div>
           <a-checkbox :checked="true">自动登录</a-checkbox>
-          <!-- <a style="float: right">忘记密码</a> -->
         </div>
         <a-form-item>
           <a-button
@@ -120,10 +81,6 @@
         <div>
           其他登录方式
           <a-icon class="icon" type="wechat"  @click="$refs.weChatLoginModal.createOrEdit()" />
-          <!-- <a-icon class="icon" type="alipay-circle" />
-          <a-icon class="icon" type="taobao-circle" />
-          <a-icon class="icon" type="weibo-circle" />
-          <router-link style="float: right" to="/dashboard/workplace">注册账户</router-link> -->
         </div>
       </a-form>
       <a-modal
@@ -192,10 +149,6 @@ export default {
       this.logging = false;
       const loginRes = res;
       if (loginRes) {
-        // const { user, permissions, roles } = loginRes.data;
-        // this.setUser(user);
-        // this.setPermissions(permissions);
-        // this.setRoles(roles);
         setAuthorization({
           token: loginRes.access_token,
           expireAt: new Date(new Date().getTime() + loginRes.expires_in),
