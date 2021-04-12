@@ -242,9 +242,7 @@ export default {
             });
           },
         });
-      } else if (e.key === "print") {
-        this.printInfo();
-      }
+      } 
     },
     handleTableChange(pagination, filters, sorter) {
       const pager = { ...this.pagination };

@@ -23,6 +23,7 @@ export function deleteManyAuditLog(ids) {
     });
   return request(`/api/audit-logging/audit-logs/delete-many?${idsStr}`, METHOD.DELETE)
 }
+
 export function exportExcel(params){
   let url = `${process.env.VUE_APP_API_BASE_URL}/api/audit-logging/audit-logs/export-excel?${qs.stringify(params)}`;
   download(url,'审计日志.xlsx');

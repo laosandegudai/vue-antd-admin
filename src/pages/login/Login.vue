@@ -214,7 +214,6 @@ export default {
           res.currentUser.tenantName=res.currentTenant.name;
           this.setUser(res.currentUser);
           let permissions = this.handlePermissions(res.auth.grantedPolicies);
-          console.log(permissions);
           this.setPermissions(permissions);
           this.setRoles(res.currentUser.roles);
           loadRoutes();
@@ -237,26 +236,6 @@ export default {
         };
       });
       return permissions;
-      // let list = Object.keys(obj).map((x) => {
-      //   let n = x.split(".").length - 1;
-      //   return {
-      //     val: x,
-      //     num: n,
-      //   };
-      // });
-      // let idList = list.filter((x) => x.num == 1);
-      // permissions = idList.map((x) => {
-      //   let operation = list
-      //     .filter((y) => y.num == 2 && y.val.indexOf(x.val) > -1)
-      //     .map((y) => {
-      //       return y.val.split(".")[2];
-      //     });
-      //   return {
-      //     id: x.val,
-      //     operation: operation,
-      //   };
-      // });
-      // return permissions;
     },
     tenantSwitchModal() {
       this.confirmLoading = true;
