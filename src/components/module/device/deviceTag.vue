@@ -61,10 +61,8 @@ export default {
     };
   },
 
-  created() {
-    setTimeout(()=>{
-            this.drawQrCode();
-        },100);
+  mounted() {
+    this.drawQrCode();
   },
   methods: {
     openModal(model){
