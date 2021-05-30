@@ -42,43 +42,7 @@
           <upload-img v-model="form.imgId" :maxCount="1"></upload-img>
         </a-form-model-item>
         <a-form-model-item label="标签" help="多个可用英文逗号分隔开，如：a,b">
-          <template v-for="(tag, index) in tags">
-            <a-tooltip v-if="tag.length > 20" :key="tag" :title="tag">
-              <a-tag
-                :key="tag"
-                :closable="index !== 0"
-                @close="() => handleClose(tag)"
-              >
-                {{ `${tag.slice(0, 20)}...` }}
-              </a-tag>
-            </a-tooltip>
-            <a-tag
-              v-else
-              :key="tag"
-              :closable="true"
-              @close="() => handleClose(tag)"
-            >
-              {{ tag }}
-            </a-tag>
-          </template>
-          <a-input
-            v-if="inputVisible"
-            ref="input"
-            type="text"
-            size="small"
-            :style="{ width: '78px' }"
-            :value="inputValue"
-            @change="handleInputChange"
-            @blur="handleInputConfirm"
-            @keyup.enter="handleInputConfirm"
-          />
-          <a-tag
-            v-else
-            style="background: #fff; borderstyle: dashed"
-            @click="showInput"
-          >
-            <a-icon type="plus" /> 添加
-          </a-tag>
+          <dynamic-tag v-model="tags" />
         </a-form-model-item>
         <a-form-model-item label="排序" help="数字，越小越向前">
           <a-input-number v-model="form.displayOrder" />
@@ -110,11 +74,13 @@ import "quill/dist/quill.bubble.css";
 import { quillEditor } from "vue-quill-editor";
 import quillConfig from "@/utils/quill-config";
 import UploadImg from '@/components/uploadImg/UploadImg'
+import DynamicTag from '@/components/tag/DynamicTag'
 export default {
   name: "ArticleForm",
   components: {
     quillEditor,
-    UploadImg
+    UploadImg,
+    DynamicTag
   },
   data() {
     return {
@@ -172,34 +138,6 @@ export default {
     getCategorys() {
       getCategorys().then((res) => {
         this.categorys = res;
-      });
-    },
-    handleClose(removedTag) {
-      const tags = this.tags.filter(tag => tag !== removedTag);
-      this.tags = tags;
-    },
-
-    showInput() {
-      this.inputVisible = true;
-      this.$nextTick(function() {
-        this.$refs.input.focus();
-      });
-    },
-
-    handleInputChange(e) {
-      this.inputValue = e.target.value;
-    },
-
-    handleInputConfirm() {
-      const inputValue = this.inputValue;
-      let tags = this.tags;
-      if (inputValue && tags.indexOf(inputValue) === -1) {
-        tags = [...tags, inputValue];
-      }
-      Object.assign(this, {
-        tags,
-        inputVisible: false,
-        inputValue: '',
       });
     },
     handleCancel() {

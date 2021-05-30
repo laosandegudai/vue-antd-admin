@@ -27,7 +27,7 @@ import Cookie from 'js-cookie'
 export default {
   props: {
     value: {
-      type: String,
+      type: [String, Array],
       value: ''
     },
     maxCount: {
@@ -58,9 +58,9 @@ export default {
   watch: {
     value(val) {
       //内部触发事件不处理,仅回传数据
-      // if (val == this.internelValue) {
-      //   return
-      // }
+      if (val == this.internelValue) {
+        return
+      }
 
       this.checkType(val)
 
